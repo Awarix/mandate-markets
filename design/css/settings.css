@@ -1,0 +1,39 @@
+/* ── Settings (tasks/27 §7) ────────────────────────────────────────
+   A screen, reached from the address in the header, holding the two blocks that are
+   not about what is happening with somebody's money but about how it should be run.
+   Narrower than the desk on purpose: these are forms and prose, and the desk's 1180px
+   is a width for tables. */
+body.term #v-settings{max-width:760px}
+.sethead{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin:0 0 24px}
+.sethead h1{font-size:clamp(24px,3.4vw,30px); margin:0; letter-spacing:-.03em}
+
+/* Leaving keeps its distance and gains a rule. The gap is not decoration: the owner
+   pressed *Stop managing my account* while looking for the sliders, and the executor
+   spent eleven minutes releasing and re-admitting a live account (tasks/18 §9). */
+.setend{margin:44px 0 12px; padding-top:28px; border-top:1px solid var(--rule)}
+.setend h2{font-size:19px; margin:0; letter-spacing:-.02em}
+
+/* The account facts, in the same shape as the limits above them. */
+#dacct .kv:first-child{border-top:0}
+
+@media (max-width:720px){
+  .setend{margin-top:34px; padding-top:22px}
+}
+
+/* ── Narrower still ──────────────────────────────────────────────────
+   The three values in this card are the long ones on the site: a 42-character address
+   and two timestamps. Below about 430px none of them fits beside its label, and the
+   general `.kv` rule in components.css — which is what stops them leaving the card at
+   all — then wraps a hex string across three right-aligned lines.
+
+   So this one card puts the label above the value and gives the value the whole width,
+   which is two lines for the address and one for each date. The limits card above is
+   deliberately *not* included: `$117.25` and `10×` fit beside their labels at any width
+   this site is read at, and stacking them would cost four rows of height to fix nothing.
+
+   The address is still whole. This is the screen where somebody checks which account
+   this is against their wallet, and a shortened one cannot be checked. */
+@media (max-width:560px){
+  #dacct .kv{display:block}
+  #dacct .kv > span:last-child{display:block; text-align:left; margin-top:3px; color:var(--ink-2)}
+}

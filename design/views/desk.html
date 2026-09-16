@@ -1,0 +1,306 @@
+<section id="v-desk" hidden>
+  <div class="note warn" id="demo" style="margin-bottom:18px"><strong>Demo data.</strong>
+    Sign in with your wallet to see your own account.</div>
+  <div class="note bad" id="dhalt" hidden style="margin-bottom:18px"></div>
+  <!-- The agent approval, when it is close or gone. Hidden entirely while it is
+       healthy; the quiet version of the same fact is one line on the settings screen,
+       which is where the rest of the account's setup went (tasks/27 §7). The loud
+       version stays here, because it is the half that stops somebody reaching the
+       last day of an approval without having seen the word.
+       See tasks/13 and notes/2026-09-02-agent-approval-verification.md. -->
+  <!-- A container, not a note: `renderAgent` puts the note inside it, and the
+       in-page renewal replaces the lot with its own. -->
+  <div id="dagent" hidden style="margin-bottom:18px"></div>
+
+  <!-- The hero: two blocks and nothing else (tasks/27 §5).
+       It carried fourteen numbers on one phone screen — balance, two spellings of
+       today, the pause level and its percentage and its distance and its baseline,
+       the mandate, what you hold, at risk, the ceiling, open, allowed, the approval
+       date. Each was true and together they were a list of everything we know.
+       Four survive: the balance, the P/L, the pause level with its distance, and the
+       venue split. The rest went to the tab it describes or to settings, which is
+       where a number somebody chose belongs.
+
+       Balance on the left because that is what the screen is opened for. The share
+       control sits on the P/L rather than on the balance: what somebody shares is
+       what happened, not what they have. -->
+  <div class="hero2">
+    <div class="h2card">
+      <!-- "Net asset value", not "Balance" — the word has to survive Polymarket
+           landing beside Hyperliquid, and a balance is what one venue holds while this
+           is the sum. It reads as a term of art at one venue and as the only honest
+           word at two, which is the direction this is going. -->
+      <div class="lab">Net asset value</div>
+      <div class="v" id="dbal">$117.25</div>
+      <!-- The split, in the owner's order: venues first, then what the money is doing.
+           `Positions` and `Cash` are always here — they are the venue's own arithmetic
+           about the whole account and they always add up to the figure above.
+
+           A venue row appears when that venue holds something and not before.
+           `Polymarket —` would be an advertisement in the space where a number goes,
+           on the screen somebody opens to see their money (tasks/27 §5); once Phase 5
+           ships, an unconnected Polymarket gets a `Link` button instead, because the
+           offer of a venue is a control and should be readable as one. Both come out
+           of the list in `renderBalance` — Phase 5 adds an entry, not a screen. -->
+      <div class="venues" id="dvenues">
+        <div><b>Positions</b><span>$30.00</span></div>
+        <div><b>Cash</b><span>$87.25</span></div>
+      </div>
+      <!-- Only once there are two venues to add together. At one venue it would be
+           explaining an addition nobody performed. -->
+      <div class="vnote" id="dvnote" hidden>Prediction markets and perps, added together.</div>
+      <!-- What the selected chart window came to, under the number it is a change in —
+           which is where the eye already is, and where Quotient put it. It follows the
+           tab across the card: pressing 30D changes this figure and this label.
+
+           It is the *venue's* P/L, deposits excluded, so it counts a position the owner
+           opened by hand as well as the ones we opened. That is the right claim for a
+           line under net asset value and the wrong one for either figure in the card
+           beside it, which is why all three are labelled with what they are a P/L of. -->
+      <div class="plrow" id="dwinrow" hidden><span class="pv num up" id="dwinpl">+$2.09 · +1.8%</span>
+        <span class="pk" id="dwinlab">past 7 days<em>everything on the venue</em></span></div>
+      <!-- The banner above replaces this when the account is halted (tasks/19 §2). -->
+      <div class="halt num" id="dhaltline">Pauses at −$11.72 · −10% of today's opening equity ($117.25) · $11.72 away</div>
+    </div>
+    <div class="h2card">
+      <div class="chead">
+        <div class="lab">Profit / loss</div>
+        <span class="sp"></span>
+        <!-- Hyperliquid's own windows, in its own words: `day`, `week`, `month`,
+             `allTime` are the period keys the endpoint answers with, so the tab a
+             reader presses and the series it draws cannot drift apart.
+             Hidden until the history loads — a paper account has none, and neither
+             does a desk whose venue read failed. -->
+        <div class="cwin" id="dwin" role="tablist" aria-label="How far back" hidden>
+          <button role="tab" data-win="day" aria-selected="false">24H</button>
+          <button role="tab" data-win="week" aria-selected="true">7D</button>
+          <button role="tab" data-win="month" aria-selected="false">30D</button>
+          <button role="tab" data-win="allTime" aria-selected="false">All</button>
+        </div>
+      </div>
+      <!-- The chart. `preserveAspectRatio="none"` because the viewBox is rebuilt at the
+           element's own pixel size on every draw and on every resize, so there is
+           nothing to preserve — see chart.ts. Empty until then, and `aria-hidden`
+           because everything it shows is stated in words directly underneath. -->
+      <div class="cplot" id="dplotwrap" hidden><svg id="dplot" aria-hidden="true" preserveAspectRatio="none"></svg></div>
+      <!-- What is here when there is no line to draw, and it is not decoration: without
+           it this card is the word `Profit / loss` over an empty box, which is the
+           fault tasks/26 §5 recorded — a heading over nothing reads as broken rather
+           than as empty. Three states reach it: still loading, a paper account (there
+           is no venue history for a book that is ours), and a venue read that failed.
+           None of them is worth the banner at the top of the screen; the balance, the
+           positions and the whole history tab are on screen and correct. -->
+      <div class="cnone" id="dplotnone" hidden></div>
+      <!-- Two more figures sat here until 2026-09-08: `realised, 7 days · of the
+           mandate` and `today · of today's opening equity`. The owner took them off
+           once the window figure existed — three profit-and-loss numbers on one card,
+           two of which are a fixed seven days and one day while the tab beside them
+           offers four windows, is the "overcomplicated" complaint tasks/27 §5 was
+           already answering.
+
+           What went with them, and where it still is. `today` is the daily-loss halt's
+           own quantity, and the line under the balance states it in full: *pauses at
+           −$11.72 · −10% of today's opening equity · $11.72 away*. `realised, 7 days`
+           is the intent ledger's — our closed trades, where the window figure is the
+           venue's whole account — and it is still what `Share this week` publishes and
+           what the share dialog previews before anything is posted, trade by trade in
+           History. Neither number was lost; both stopped being stated twice. -->
+      <!-- Share the week (tasks/16 §5). Once, on the account's own result — and never
+           on an open position, which would be a claim about a number that has not
+           happened. Hidden until the desk knows this is somebody's own account. -->
+      <div id="dsharewrap" hidden>
+        <button class="btn ghost sm" id="dshare">Share this week</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- The tab row (tasks/27 §2). Two things it is not: it is not a filled pill, because
+       `.pill` already means "status badge" on this site — Live, Long 10×, Next — and a
+       second pill shape meaning "press me" collides with the first. And the font weight
+       does not change between states, so selecting a tab never shifts the row.
+
+       The counts ride inside the tab as a dimmed suffix, which answers "is there
+       anything to look at" before it is pressed. `Open 3` is also where `3 open · 5
+       allowed` went: it is a fact about this tab and reads better as its number.
+
+       Settings are deliberately not a fourth tab. These three are what the desk is
+       *for* and all three answer "what is happening with my money"; limits and leaving
+       are settings and live behind the address in the header (tasks/27 §7). -->
+  <div class="tabrow">
+    <div class="tabs" role="tablist" aria-label="What is happening with this account">
+      <button class="tab" role="tab" id="tabopen" data-tab="open" aria-selected="true" aria-controls="paneopen">Open <span class="tn" id="tnopen">3</span></button>
+      <button class="tab" role="tab" id="tabhist" data-tab="hist" aria-selected="false" aria-controls="panehist" tabindex="-1">History <span class="tn" id="tnhist">41</span></button>
+      <button class="tab" role="tab" id="tabskip" data-tab="skip" aria-selected="false" aria-controls="paneskip" tabindex="-1">Skipped <span class="tn" id="tnskip">104</span></button>
+    </div>
+    <span class="sp"></span>
+    <!-- Both hidden on a healthy live desk, and both shipped hidden so the demo desk a
+         visitor reads is the ordinary case. `renderDesk` carries the argument for when
+         each one comes back: paper for the first, a non-zero count for the second. -->
+    <span class="pill acc" id="dstops" hidden>Simulated book, priced off live marks</span>
+    <span class="pill down" id="dforeign" hidden>1 position we did not open</span>
+  </div>
+
+  <div class="tabpane" id="paneopen" role="tabpanel" aria-labelledby="tabopen">
+    <!-- A heading per venue, then that venue's list. One venue today, so one heading,
+         which is the point: Phase 5 adds a heading and a list rather than a redesign.
+         Only this tab is grouped by venue — History and Skipped are chronological and
+         name the venue's own symbol in the Market column. -->
+    <div class="vhead">
+      <h2>Hyperliquid</h2>
+      <span class="sp"></span>
+      <span class="secmeta" id="dopenmeta">$30.00 at risk of $50.00 · 3 of 5 positions</span>
+    </div>
+    <div id="dpos">
+    <article class="pcard">
+      <div class="phead"><span class="coin">PLATINUM</span><span class="pill up"><span class="dot"></span>Long 10×</span>
+        <div class="pright"><button class="sharebtn" disabled>Share</button>
+        <span class="pnl up num">+$0.49 <small>+4.9%</small></span></div></div>
+      <div class="track"><div class="axis">
+        <span class="band up" style="left:39.14%;width:6.37%"></span>
+        <span class="tk end lo" style="left:0"></span><span class="tk end hi" style="left:100%"></span>
+        <span class="tk entry" style="left:39.14%"></span><span class="tk now" style="left:45.51%"></span>
+        <span class="nowlab" style="left:45.51%"><span class="w">now</span>1,519.85</span></div>
+        <div class="tlab"><span class="e0"><span class="w">stop</span>1,466.93</span>
+        <span class="em" style="left:39.14%"><span class="w">entry</span>1,512.44</span>
+        <span class="e1"><span class="w">target</span>1,583.20</span></div></div>
+      <div class="why">Quotient's strongest call today. Closes tomorrow at 21:00 whatever happens, because
+        that is when their forecast expires.</div>
+    </article>
+
+    <article class="pcard">
+      <div class="phead"><span class="coin">BTC</span><span class="pill down"><span class="dot"></span>Short 10×</span>
+        <div class="pright"><button class="sharebtn" disabled>Share</button>
+        <span class="pnl up num">+$0.70 <small>+7.0%</small></span></div></div>
+      <div class="track"><div class="axis">
+        <span class="band up" style="left:25.71%;width:5.99%"></span>
+        <span class="tk end lo" style="left:0"></span><span class="tk end hi" style="left:100%"></span>
+        <span class="tk entry" style="left:25.71%"></span><span class="tk now" style="left:31.70%"></span>
+        <span class="nowlab" style="left:31.70%"><span class="w">now</span>78,420</span></div>
+        <div class="tlab"><span class="e0"><span class="w">stop</span>81,340</span>
+        <span class="em" style="left:25.71%"><span class="w">entry</span>78,971</span>
+        <span class="e1"><span class="w">target</span>72,127</span></div></div>
+      <div class="why">Quotient expects 72,127 against a spot of 78,971. Your stop sits well clear of
+        liquidation.</div>
+    </article>
+
+    <article class="pcard">
+      <div class="phead"><span class="q">Fed cuts rates in September</span><span class="pill up"><span class="dot"></span>Yes</span>
+        <span class="pill quiet">Soon</span>
+        <div class="pright"><button class="sharebtn" disabled>Share</button>
+        <span class="pnl up num">+$1.11 <small>+11.1%</small></span></div></div>
+      <div class="track"><div class="axis">
+        <span class="band up" style="left:56%;width:7%"></span>
+        <span class="tk end lo" style="left:0"></span><span class="tk end hi" style="left:100%"></span>
+        <span class="tk entry" style="left:56%"></span><span class="tk now" style="left:63%"></span>
+        <span class="nowlab" style="left:63%"><span class="w">now</span>63¢</span></div>
+        <div class="tlab"><span class="e0">0¢</span>
+        <span class="em" style="left:56%"><span class="w">bought</span>56¢</span>
+        <span class="e1">100¢</span></div></div>
+      <div class="why">Quotient puts this at 78¢ while the market says 63¢. No leverage here — the most it
+        can lose is what it cost.</div>
+    </article>
+    </div>
+  </div>
+
+  <!-- Closed trades. A tab, not a fourth view and no longer a collapsed section: it is
+       the same account and the same session, and it is one of the three things the desk
+       is for. tasks/09, tasks/27 §6. -->
+  <div class="tabpane" id="panehist" role="tabpanel" aria-labelledby="tabhist" hidden>
+    <div class="paneh">
+      <!-- Static, and a pill rather than a count: the number is already in the tab, and
+           the ordering is the fact this list needs stated — `Load older` at the bottom
+           pages backwards from here. -->
+      <span class="pill quiet">Newest first</span>
+      <span class="sp"></span>
+      <button class="btn ghost sm" id="dhistrefresh">Refresh</button>
+    </div>
+    <div id="dhist">
+      <div class="tbl"><div class="tscroll"><div class="thead">
+        <span class="tc1">Market</span><span class="tc2">Position</span><span class="tc3">What happened</span><span class="tc4">Net</span><span class="tc5"></span>
+      </div>
+      <div id="dhistrows">
+      <div class="trow"><span class="tc1">PLATINUM</span>
+        <span class="tc2"><span class="pill up"><span class="dot"></span>Long 10×</span></span>
+        <span class="tc3"><dl class="tdl">
+          <dt>Entry</dt><dd>1,402.30</dd>
+          <dt>Target</dt><dd>1,431.60 · +2.1% · +21% of margin</dd>
+          <dt>Stop</dt><dd>1,360.20 · −3.0% · −30% of margin</dd>
+          <dt>Exit</dt><dd>1,431.60 · +2.1%</dd>
+          <dt>Margin</dt><dd>$10.00 at 10×</dd>
+          <dt>Held</dt><dd>3.4h</dd>
+          <dt>Costs</dt><dd>$0.09 in fees · $0.01 funding paid</dd>
+          <dt>Closed</dt><dd>Sep 7, 12:38 — the target was hit</dd>
+        </dl></span>
+        <span class="tc4 pnl num up">+$2.01 <small>+20.1%</small></span>
+        <span class="tc5"><button class="sharebtn" disabled>Share</button></span></div>
+      <div class="trow"><span class="tc1">xyz:COPPER</span>
+        <span class="tc2"><span class="pill down"><span class="dot"></span>Short 20×</span></span>
+        <span class="tc3"><dl class="tdl">
+          <dt>Entry</dt><dd>6.6512</dd>
+          <dt>Target</dt><dd>6.5108 · −2.1% · +42% of margin</dd>
+          <dt>Stop</dt><dd>6.7503 · +1.5% · −30% of margin</dd>
+          <dt>Exit</dt><dd>6.6698 · +0.3%</dd>
+          <dt>Margin</dt><dd>$5.00 at 20×</dd>
+          <dt>Held</dt><dd>60m</dd>
+          <dt>Costs</dt><dd>$0.11 in fees · $0.00 funding paid</dd>
+          <dt>Closed</dt><dd>Sep 6, 18:02 — the call went neutral</dd>
+        </dl></span>
+        <span class="tc4 pnl num down">−$0.39 <small>−7.8%</small></span>
+        <span class="tc5"><button class="sharebtn" disabled>Share</button></span></div>
+      </div>
+      </div>
+      <div class="tfoot"><strong>Net</strong> is after the venue's own fees and funding, as a share of the
+        margin the position posted.</div></div>
+    </div>
+    <div id="dhistmorewrap" hidden style="margin-top:14px">
+      <button class="btn ghost sm" id="dhistnext">Load older</button>
+    </div>
+  </div>
+
+  <!-- What we saw, and what we did about it. Taken and skipped in one list, because
+       the interesting comparison is between them: a screen that only shows refusals
+       cannot answer "and what did you take instead". tasks/10.
+       The reasons card leads, because it answers the tab's own question in four lines
+       before anybody reads a row. -->
+  <div class="tabpane" id="paneskip" role="tabpanel" aria-labelledby="tabskip" hidden>
+    <div class="card pad" style="margin-bottom:20px">
+      <div class="kicker" style="font-size:12px; margin-bottom:12px">Why nothing else was taken</div>
+      <div id="dskips">
+      <div class="kv"><span class="k">Deadline already passed</span><span>64</span></div>
+      <div class="kv"><span class="k">Move too small to cover fees</span><span>32</span></div>
+      <div class="kv"><span class="k">Held too long to be worth it</span><span>8</span></div>
+      </div>
+      <div class="note" style="margin-top:14px; font-size:14px">Skips are the limits working. An empty
+        list would mean something is broken.</div>
+    </div>
+    <div class="paneh">
+      <span class="pill quiet" id="dsigwin">Last 7 days</span>
+      <span class="sp"></span>
+      <!-- What the feed costs and how often we ask it. It belongs on this tab because
+           this is the list those polls produce. -->
+      <span class="secmeta" id="dfeed"></span>
+      <button class="btn ghost sm" id="dsigrefresh">Refresh</button>
+    </div>
+    <div id="dsig">
+      <div class="tbl"><div class="tscroll"><div class="thead">
+        <span class="tc1">Market</span><span class="tc2">Decision</span><span class="tc3">Why</span><span class="tc4">When</span>
+      </div>
+      <div class="trow"><span class="tc1">BTC</span>
+        <span class="tc2"><span class="pill up"><span class="dot"></span>Long</span></span>
+        <span class="tc3">Taken — closed on target. Quotient puts BTC 1.4 sigma above its reference over 6h.
+          <span class="pnl num up">+$1.12</span></span>
+        <span class="tc4 sn">Sep 7, 09:14</span></div>
+      <div class="trow"><span class="tc1">xyz:NVDA</span>
+        <span class="tc2"><span class="pill quiet">Skipped</span></span>
+        <span class="tc3">Move too small to cover fees. 0.31 sigma against a 0.50 gate.</span>
+        <span class="tc4 sn">Sep 7, 08:42 · seen 3×</span></div>
+      <div class="trow"><span class="tc1">GOLD</span>
+        <span class="tc2"><span class="pill quiet">Skipped</span></span>
+        <span class="tc3">Deadline already passed. The forecast's horizon closed before we polled.</span>
+        <span class="tc4 sn">Sep 7, 08:11</span></div>
+      </div>
+      <div class="tfoot"><strong>Sigma</strong> measures a forecast's move against how much that market
+        normally moves over the same horizon — 1 sigma is an ordinary day's range.</div></div>
+    </div>
+  </div>
+</section>

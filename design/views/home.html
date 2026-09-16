@@ -1,0 +1,183 @@
+<!-- ═══════════ HOME — editorial ═══════════ -->
+<section id="v-home">
+  <div class="hero" id="hero">
+    <span class="chip"><span class="lv"></span>Automated trading on your own account</span>
+
+    <h1>
+      <span class="ln" style="--i:0"><span>Your money works.</span></span>
+      <span class="ln" style="--i:1"><span>You don't.</span></span>
+    </h1>
+
+    <p class="sub">Quotient's researchers read the markets all day and publish what they expect.
+      Mandate turns that into positions on your own exchange account — sized, stopped and closed
+      <b>without you ever opening one</b>.</p>
+
+    <!-- The quotable paragraph (tasks/15). Names what the hero does not — Mandate,
+         non-custodial, Quotient, Hyperliquid, the bounds — because a researcher types
+         those words and a model lifts this sentence into somebody else's answer.
+         Present tense, no promise; the 10% is RISK_PARAMS, pinned by
+         src/web/discovery.test.ts.
+
+         It said "at most half your mandate is deployed across at most five positions"
+         until tasks/21 raised the deployed cap to 100% and derived the count from the
+         size. Both halves became false, and the sentence a model lifts is the last
+         place a false number should survive. It does not restate the count, because
+         there is no longer one count: it is floor(1 / your size), and the honest short
+         form is the rule rather than a number that is right for one setting. -->
+    <p class="sub fact">Mandate is non-custodial execution for Quotient's outlooks on your own
+      Hyperliquid account: the key you approve can place orders and cannot withdraw, every position
+      sits on isolated margin with its stop resting on the exchange, the size you pick decides how
+      many positions run at once and together they use your whole mandate, and a 10% loss in a day
+      pauses the account.</p>
+
+    <div class="live">
+      <div class="live-head">
+        <div>
+          <span class="lab">Balance</span>
+          <span class="big num" id="bal">$1,000.00</span>
+        </div>
+        <div class="delta num" id="delta">+$0.00</div>
+        <div class="since" id="since">since you connected</div>
+      </div>
+
+      <div class="plot" id="plot">
+        <svg id="eq" aria-hidden="true" preserveAspectRatio="none">
+          <path id="eqArea" fill="url(#eqg)" stroke="none"></path>
+          <polyline id="eqFloor" fill="none" stroke="var(--down)" stroke-width="1.25"
+                    stroke-dasharray="3 5" opacity=".8" stroke-linejoin="round"></polyline>
+          <polyline id="eqGlow" fill="none" stroke="var(--up)" stroke-width="7" opacity=".13"
+                    stroke-linejoin="round" stroke-linecap="round"></polyline>
+          <polyline id="eqLine" fill="none" stroke="var(--up)" stroke-width="2.25"
+                    stroke-linejoin="round" stroke-linecap="round"></polyline>
+          <g id="eqTicks"></g>
+          <defs>
+            <linearGradient id="eqg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="var(--up)" stop-opacity=".26"/>
+              <stop offset="100%" stop-color="var(--up)" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <span class="marker" id="mk"></span>
+      </div>
+
+      <div class="legend">
+        <span class="w"><i></i><em id="lgw">0</em> closed in profit, <em id="lgwa">+$0.00</em> average</span>
+        <span class="l"><i></i><em id="lgl">0</em> stopped, <em>−$3.00</em> every time</span>
+        <span class="cap"><i></i>daily loss cap <em>−$10.00</em>, from wherever the day opened</span>
+      </div>
+    </div>
+
+    <div class="cta">
+      <button class="btn" data-go="connect">Get access</button>
+      <button class="btn ghost" data-go="desk">See the desk</button>
+    </div>
+  </div>
+
+  <section class="sec">
+    <h2 class="rv">Three things happen. You are in none of them.</h2>
+    <p class="body rv" style="--i:1">The middle one is where all the work is. That is the part you are buying.</p>
+
+    <div class="beats rv" style="--i:2">
+      <div class="beat">
+        <div class="n">First</div>
+        <div class="t">Quotient researches</div>
+        <div class="d">Their models read every market, all day, and publish where they think price is going.</div>
+        <div class="feed" id="feed">
+          <div><span class="s">PLATINUM</span><span class="g num">σ 0.00</span></div>
+          <div><span class="s">BTC</span><span class="g num">σ 0.00</span></div>
+          <div><span class="s">NVDA</span><span class="g num">σ 0.00</span></div>
+        </div>
+      </div>
+      <div class="conn" id="c1"><i></i></div>
+      <div class="beat mid" id="mid">
+        <div class="n">Then</div>
+        <div class="t">Mandate acts</div>
+        <div class="d">Everything between a forecast and a live position, done for you, inside limits you set once.</div>
+        <div class="stages" id="stages">
+          <div class="stage"><span class="bx"></span>choose the market</div>
+          <div class="stage"><span class="bx"></span>check your limits</div>
+          <div class="stage"><span class="bx"></span>size the position</div>
+          <div class="stage"><span class="bx"></span>rest the stop on the venue</div>
+          <div class="stage"><span class="bx"></span>hold to the deadline</div>
+        </div>
+      </div>
+      <div class="conn" id="c2"><i></i></div>
+      <div class="beat">
+        <div class="n">Result</div>
+        <div class="t">Your balance moves</div>
+        <div class="d">Into your own account, on the exchange, where you can see every fill yourself.</div>
+        <div class="payoff" id="payoff">
+          <div class="amt num" id="beatamt">+$0.00</div>
+          <div class="fly num" id="fly"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2 class="rv">Ten minutes, once.</h2>
+    <div class="cols">
+      <div class="doit rv" style="--i:1">
+        <div class="kicker">What you do</div>
+        <ul class="lst">
+          <li><b>01</b><span>Fund an exchange account</span></li>
+          <li><b>02</b><span>Pick three numbers: leverage, stop, size</span></li>
+        </ul>
+        <p class="body" style="margin-top:16px; font-size:15px">That is the entire list. It does not repeat.</p>
+      </div>
+      <div class="dont rv" style="--i:2">
+        <div class="kicker">What you never do</div>
+        <ul class="lst no">
+          <li><b>—</b><span>Read a forecast</span></li>
+          <li><b>—</b><span>Decide a position size</span></li>
+          <li><b>—</b><span>Place an order</span></li>
+          <li><b>—</b><span>Remember to set a stop</span></li>
+          <li><b>—</b><span>Watch a screen</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="claim rv">
+    <p>We can trade your account. We can never take money out of it.</p>
+    <div class="fine">The key you grant signs orders and nothing else. Revoke it on the exchange and we
+      stop that second — your stops stay resting there, working, without us.</div>
+  </div>
+
+  <section class="sec">
+    <h2 class="rv">Perps today. Prediction markets next.</h2>
+    <p class="body rv" style="--i:1">A price forecast and a probability are the same instruction underneath — a view, a
+      target, a deadline. Both arrive on the same desk and obey the same limits.</p>
+    <!-- Two cards, because two hairline rows carrying a name and a badge spanned the
+         whole page saying almost nothing (owner, 2026-09-08: *"this block looks
+         poor"*). tasks/26 §3 had just stripped the duplicated sentence out of these
+         rows, which is what left them that empty — the fix there was right and this is
+         the rest of it.
+
+         What each card says is the venue's own argument rather than its definition.
+         No figures: every number on this page is pinned to src/risk/params.ts by
+         src/web/discovery.test.ts, and "the leverage you pick" stays true when the
+         three values change while "5×, 10× or 20×" would not.
+
+         The second card does not name a venue. Polymarket is Phase 5 and not started
+         (docs/STATUS.md), and the section heading above already makes exactly the
+         claim this is allowed to make. -->
+    <div class="vcards rv" style="--i:2">
+      <div class="vcard">
+        <div class="vhd"><h3>Perps on Hyperliquid</h3>
+          <span class="pill up"><span class="dot"></span>Live</span></div>
+        <p>The leverage is yours to pick, so one account scales without changing how any of
+          it works. Every position opens with its target and its stop <b>already resting on
+          the exchange</b> — they hold whether or not anything of ours is still running.</p>
+      </div>
+      <div class="vcard">
+        <div class="vhd"><h3>Prediction markets</h3>
+          <span class="pill quiet">Next</span></div>
+        <p>The same instruction priced as a probability rather than a price. No leverage
+          there, so the most a position can lose is what it cost — and it arrives on the
+          same desk, under the same limits.</p>
+      </div>
+    </div>
+    <div class="rv" style="--i:3; margin-top:34px"><button class="btn" data-go="connect">Get access</button></div>
+  </section>
+</section>

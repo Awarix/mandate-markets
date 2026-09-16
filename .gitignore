@@ -1,0 +1,21 @@
+node_modules/
+dist/
+data/
+logs/
+.env
+.env.*
+!.env.example
+*.sqlite
+*.sqlite-journal
+.DS_Store
+
+# Built design output — contains embedded fonts that must not be redistributed.
+design/dist/
+design/fonts/
+
+# Captured vendor payloads are not published.
+fixtures/
+
+# Internal working documents are not published.
+docs/
+.env.example

@@ -1,0 +1,69 @@
+/* "Push everything after me to the right." It was declared twice, scoped to two
+   containers, so the same span did nothing in the four others that used it — the
+   leaderboard's own Refresh and Back sat against the meta text rather than the right
+   edge, and had since that screen was written. One rule, no scope, one meaning. */
+.sp{margin-left:auto}
+
+.kv{display:flex; justify-content:space-between; gap:16px; padding:13px 0; border-top:1px solid var(--rule);
+  font-family:"Tabular",monospace; font-size:14px}
+.kv:first-child{border-top:0}
+/* The label never wraps and the value always may. A flex item's `min-width` is `auto`,
+   so an unbreakable value — a 42-character address is the one this bit — refuses to
+   shrink and runs out of the card instead, which is what the settings screen did on a
+   phone (owner, 2026-09-08). Both halves were shrinking there: `Approval runs to`
+   broke across two lines while its date did too.
+   `anywhere` rather than `break-word` because hex has no break opportunity in it at
+   all, and the address is kept whole rather than shortened — this is the screen where
+   somebody checks *which* account this is against their wallet, and a truncated one
+   cannot be checked. */
+.kv .k{color:var(--dim); flex:none}
+.kv > span:last-child{min-width:0; overflow-wrap:anywhere; text-align:right}
+.seg{display:flex; border:1px solid var(--rule-2); border-radius:4px; overflow:hidden; width:max-content}
+.seg button{font-family:"Tabular",monospace; font-size:14px; padding:11px 22px; cursor:pointer; min-height:44px;
+  background:var(--panel); color:var(--ink-2); border:0; border-right:1px solid var(--rule-2)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--btn-bg); color:var(--btn-ink)}
+.seg button[disabled]{opacity:.42; cursor:not-allowed}
+.seg button[disabled]:after{content:" · soon"; font-size:11px; letter-spacing:.04em}
+
+/* A setting that is real but is not yet a decision anybody has to make.
+   Deliberately quieter than the limits above it: the segmented control's default
+   pressed state is the primary-button treatment — cream on ink, the same weight as
+   *Create my key and approve* — which read as "you must choose this". Inside here the
+   selection is a tint instead, so the block says "there is a second way to run this,
+   and it is not ready" rather than putting a decision in front of someone. */
+.exp{border:1px solid var(--rule); border-radius:6px; padding:15px 16px 16px;
+  margin-top:22px; background:var(--ground-2)}
+.exp-h{display:flex; align-items:center; gap:9px; margin-bottom:12px}
+.exp-tag{font-family:"Tabular",monospace; font-size:10.5px; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--warn); border:1px solid var(--rule-2);
+  border-radius:3px; padding:2px 6px}
+.exp .seg{border-color:var(--rule)}
+.exp .seg button{background:transparent; padding:9px 17px; font-size:13px;
+  border-right-color:var(--rule)}
+.exp .seg button[aria-pressed="true"]{background:var(--accent-soft); color:var(--ink)}
+.exp-opt{margin-top:11px; font-size:13px; color:var(--dim); line-height:1.55; max-width:40em}
+.exp-opt b{color:var(--ink-2); font-weight:500}
+input[type=range]{width:100%; max-width:330px; accent-color:var(--accent);
+  min-height:44px; touch-action:manipulation}
+.toggle{display:inline-flex;align-items:center;gap:10px;cursor:pointer}
+.toggle input{position:absolute;opacity:0;width:0;height:0}
+.sw{width:36px;height:20px;border-radius:10px;background:var(--rule-2);position:relative;transition:background .15s;flex:none}
+.sw::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;
+  background:#fff;transition:transform .15s}
+.toggle input:checked + .sw{background:var(--up)}
+.toggle input:checked + .sw::after{transform:translateX(16px)}
+.toggle input:focus-visible + .sw{outline:2px solid var(--accent);outline-offset:2px}
+.card{background:var(--panel); border:1px solid var(--rule); border-radius:5px; box-shadow:var(--shadow)}
+.pad{padding:28px 30px}
+.g2{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:24px}
+
+/* ── The phone (tasks/26) ──────────────────────────────────────────
+   660px is `.thead`'s own floor and 20px is `.wrap`'s narrow gutter, so 720 is
+   the width below which the desktop tables cannot fit however they are asked to. */
+@media (max-width:720px){  /* `width:max-content` on two 22px-padded buttons is 425px, which is the one thing
+     that overflowed a 414px column once every panel on the page was opened at once.
+     Full width and an even split, which is also a bigger target for each. */
+  .seg{width:100%}
+  .seg button{flex:1 1 0; padding:11px 12px; min-width:0}
+}

@@ -1,0 +1,55 @@
+{
+  "name": "signaldesk",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Non-custodial execution of Quotient signals on Hyperliquid",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "probe": "tsx src/scripts/probe-quotient.ts",
+    "probe:hl": "tsx src/scripts/probe-hl.ts",
+    "probe:pm-builder": "tsx src/scripts/probe-pm-builder.ts",
+    "preflight": "tsx src/scripts/preflight.ts",
+    "fills": "node --disable-warning=ExperimentalWarning --import tsx src/scripts/fills.ts",
+    "expectancy": "node --disable-warning=ExperimentalWarning --import tsx src/scripts/expectancy.ts",
+    "exit-policy": "node --disable-warning=ExperimentalWarning --import tsx src/scripts/exit-policy.ts",
+    "stop-sweep": "node --disable-warning=ExperimentalWarning --import tsx src/scripts/stop-sweep.ts",
+    "counterfactuals": "node --disable-warning=ExperimentalWarning --import tsx src/scripts/counterfactuals.ts",
+    "backtest": "node --disable-warning=ExperimentalWarning --import tsx src/scripts/backtest.ts",
+    "feed-sigma": "node --disable-warning=ExperimentalWarning --import tsx src/scripts/feed-sigma.ts",
+    "id-split": "node --disable-warning=ExperimentalWarning --import tsx src/scripts/id-split.ts",
+    "pm-census": "node --disable-warning=ExperimentalWarning --import tsx src/scripts/pm-census.ts",
+    "pm-resolve": "node --disable-warning=ExperimentalWarning --import tsx src/scripts/pm-resolve.ts",
+    "probe:pm-book": "node --disable-warning=ExperimentalWarning --import tsx src/scripts/pm-book.ts",
+    "pm-prices": "node --disable-warning=ExperimentalWarning --import tsx src/scripts/pm-prices.ts",
+    "pm-backtest": "node --disable-warning=ExperimentalWarning --import tsx src/scripts/pm-backtest.ts",
+    "record": "tsx src/signals/recorder.ts",
+    "exec": "node --disable-warning=ExperimentalWarning --import tsx src/exec/runner.ts",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p design/tsconfig.json",
+    "test": "node --disable-warning=ExperimentalWarning --import tsx --test \"src/**/*.test.ts\" \"design/src/**/*.test.ts\"",
+    "watchdog": "tsx src/ops/watchdog.ts",
+    "keys": "tsx src/keys/cli.ts",
+    "queue": "node --disable-warning=ExperimentalWarning --import tsx src/scripts/queue.ts",
+    "settings": "node --disable-warning=ExperimentalWarning --import tsx src/scripts/settings.ts",
+    "unhalt": "node --disable-warning=ExperimentalWarning --import tsx src/scripts/unhalt.ts",
+    "cards": "node --disable-warning=ExperimentalWarning --import tsx src/scripts/cards.ts",
+    "icons": "node --disable-warning=ExperimentalWarning --import tsx src/scripts/icons.ts",
+    "web": "node --disable-warning=ExperimentalWarning --import tsx src/web/server.ts",
+    "build:web": "python3 design/build.py"
+  },
+  "dependencies": {
+    "@nktkas/hyperliquid": "^0.33.3",
+    "@resvg/resvg-js": "^2.6.2",
+    "dotenv": "^17.2.3",
+    "satori": "^0.33.4",
+    "viem": "^2.56.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "esbuild": "^0.28.2",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}

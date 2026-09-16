@@ -1,0 +1,20 @@
+{
+  // The browser half of the project. `npm run typecheck` runs this after the root one.
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    // Node's types are here only for the `*.test.ts` files, which run under
+    // `node --test` and are never reachable from main.ts, so esbuild never bundles
+    // them. Browser modules must not use anything from them.
+    "types": ["node"],
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "verbatimModuleSyntax": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true
+  },
+  "include": ["src/**/*"]
+}

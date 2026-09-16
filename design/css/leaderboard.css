@@ -1,0 +1,47 @@
+/* The leaderboard's columns. Eight, where the desk's tables have at most five, so
+   `.tc1`-`.tc5` do not stretch to cover it. A grid rather than a sixth and seventh
+   width class: the header and the rows then agree by construction instead of by two
+   lists of numbers being kept in step by hand. Applied *alongside* `.thead`/`.trow`,
+   which keep the sticky header, the rules and the padding — this only sets the
+   columns, so it overrides `display:flex` and nothing else. */
+/* Six even numeric columns after the rank and the address. The floor is set by the
+   widest *heading* rather than by any figure — "WIN RATE" at 11px uppercase with
+   .09em tracking is wider than every number under it — so nothing wraps as the
+   figures grow. */
+/* The account column holds the four settings badges under the address, so its floor is
+   what those need on one line rather than what an address needs — at 150px they wrapped
+   to three lines and every row grew with them. */
+.lbg{display:grid; gap:14px; min-width:980px;
+  grid-template-columns:30px minmax(330px,1.6fr) repeat(6,minmax(76px,1fr))}
+.lbg > :nth-child(n+3){text-align:right}
+.lbflag{display:block; margin-top:5px}
+
+/* How each account is traded, under its address. Every row here takes the same signals,
+   so this is the only thing that differs between them — which is what makes a ranking
+   worth reading rather than a scoreboard.
+
+   Deliberately **not** `.pill`: that class means "status" on the desk (halted, live,
+   open) and is uppercase, bordered and loud. These are four facts that must not compete
+   with the numbers they explain, so they are quiet monospace with a hairline. The label
+   is dimmer than its value, because somebody scanning the column wants the 20x. */
+.lbset{display:flex; flex-wrap:wrap; gap:5px; margin-top:6px}
+.lbset span{font-family:"Tabular",monospace; font-size:11px; line-height:1.5;
+  color:var(--ink-2); border:1px solid var(--rule-2); border-radius:3px; padding:1px 6px;
+  white-space:nowrap}
+.lbset span b{font-weight:400; color:var(--dim)}
+
+/* ── The phone (tasks/26) ──────────────────────────────────────────
+   660px is `.thead`'s own floor and 20px is `.wrap`'s narrow gutter, so 720 is
+   the width below which the desktop tables cannot fit however they are asked to. */
+@media (max-width:720px){  /* The leaderboard's eight columns. Its cells are bare numbers, so unlike the desk's
+     tables it has no labels of its own once the header goes — hence `data-label`,
+     written from the same `HEADINGS` array the header is, in design/src/leaderboard.ts. */
+  .trow.lbg{grid-template-columns:auto 1fr; gap:7px 14px; min-width:0; padding:16px 18px}
+  .trow.lbg > :nth-child(1){grid-area:1/1; align-self:center}
+  .trow.lbg > :nth-child(2){grid-area:1/2; justify-self:start; text-align:left}
+  .trow.lbg > :nth-child(n+3){grid-column:1/-1; display:flex; justify-content:space-between;
+    gap:16px; text-align:right; border-top:1px solid var(--rule); padding-top:7px}
+  .trow.lbg > :nth-child(n+3)::before{content:attr(data-label); color:var(--dim);
+    font-family:"Tabular",monospace; font-size:11px; letter-spacing:.09em;
+    text-transform:uppercase; align-self:center}
+}

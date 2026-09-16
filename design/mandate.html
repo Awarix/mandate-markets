@@ -1,0 +1,240 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mandate</title>
+<!-- The head a scraper reads (tasks/15). The origin is hardcoded: there is one canonical
+     site, and a tag advertising a staging host helps nobody. Every path serves this
+     document, so every path canonicalises to the root rather than indexing as a
+     duplicate. -->
+<meta name="description" content="Quotient's researchers read the markets all day and publish what they expect. Mandate turns that into positions on your own exchange account — sized, stopped and closed without you ever opening one.">
+<link rel="canonical" href="https://mandate.markets/">
+<!-- The icons (tasks/20 §2.1). The SVG first and it is the one that wins wherever it is
+     read: it is the only cut that follows the tab strip's own theme, and `theme.ts`
+     re-points this link at a fixed-ink cut when a reader picks a theme on the page. The
+     ICO is for Safari and the scrapers that read nothing else, the touch icon for an iOS
+     home screen; both are rasters and carry the dark tile, because neither slot tells us
+     what it will sit on. -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<!-- The social block, and the markers are load-bearing (tasks/16 §3). `src/web/server.ts`
+     replaces everything between them, and only that, when it serves a share landing
+     path (/s/trade, /s/account) — so the tile points at that card while the two inline
+     blocks the CSP hashes are untouched and the policy still holds.
+     What follows is the default: the product card, which is what every bare
+     mandate.markets link gets. It is byte-for-byte what `socialTags()` in
+     `src/web/cards.ts` emits for the home page, and `cards.test.ts` fails if the two
+     drift — one function emits every social tag, or the image URL forks between
+     `og:image` and `twitter:image` and nobody notices for a month.
+     NB: never write a literal script or style open tag in this file's prose, even
+     inside a comment. `loadPage` finds the blocks it hashes with a regex over the raw
+     HTML, so one in a comment silently swallows the real block and the page ships with
+     a policy that refuses its own stylesheet. It happened while this comment was being
+     written; see notes/2026-09-05-share-cards.md. -->
+<!--@SOCIAL@-->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Mandate">
+<meta property="og:title" content="Mandate — your money works. You don't.">
+<meta property="og:description" content="Quotient's researchers read the markets all day and publish what they expect. Mandate turns that into positions on your own exchange account — sized, stopped and closed without you ever opening one.">
+<meta property="og:url" content="https://mandate.markets/">
+<meta property="og:image" content="https://mandate.markets/share/home.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Mandate — your money works. You don't.">
+<meta name="twitter:description" content="Quotient's researchers read the markets all day and publish what they expect. Mandate turns that into positions on your own exchange account — sized, stopped and closed without you ever opening one.">
+<meta name="twitter:image" content="https://mandate.markets/share/home.png">
+<!--@/SOCIAL@-->
+<!-- Structured data, once, on the root. Every field true to a reader who checks,
+     because this is quoted verbatim: no offers (the price is not decided), no rating,
+     no invented date. A data block, so the CSP hash list leaves it out — see loadPage. -->
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Mandate","url":"https://mandate.markets/","applicationCategory":"FinanceApplication","operatingSystem":"Web Browser","image":"https://mandate.markets/icon-512.png","description":"Quotient's researchers read the markets all day and publish what they expect. Mandate turns that into positions on your own exchange account — sized, stopped and closed without you ever opening one."}</script>
+<style>
+/* The stylesheet, in cascade order. Each file carries its own media queries, so
+   there is no cross-cutting `responsive` section for rules to collect in — that is
+   how the old `── Connect ──` block came to hold the tables, the share dialog and
+   half the shared components. build.py refuses to build if a file in css/ is not
+   named here, or if any of them contains a literal style or script open tag. */
+/*@INCLUDE css/tokens.css@*/
+/*@INCLUDE css/base.css@*/
+/*@INCLUDE css/home.css@*/
+/*@INCLUDE css/desk.css@*/
+/*@INCLUDE css/connect.css@*/
+/*@INCLUDE css/settings.css@*/
+/*@INCLUDE css/tables.css@*/
+/*@INCLUDE css/leaderboard.css@*/
+/*@INCLUDE css/dialogs.css@*/
+/*@INCLUDE css/components.css@*/
+/*@INCLUDE css/footer.css@*/
+/*@INCLUDE css/views.css@*/
+</style>
+
+<!-- The designer's mark (tasks/20), once, for the three places that draw it: the
+     two chrome headers and the footer. A <symbol> rather than three copies of 2 kB
+     of path data, and `currentColor` throughout so it follows the theme without a
+     second rule. Generated by design/tools/mark.py from design/static/logo#2.svg -
+     edit that and re-run, never this. -->
+<svg width="0" height="0" aria-hidden="true" style="position:absolute"><symbol id="mark-glyph" viewBox="0 0 404 426"><g clip-path="url(#markclip)">
+<path d="M105.06 424.85L199.2 166.21H246.67L152.53 424.85H105.06ZM226.69 391.82L320.83 133.18H368.3L274.16 391.82H226.69ZM68.3101 375.23L198.9 16.45H246.38L115.79 375.23H68.3201H68.3101ZM191.99 336.57L286.13 77.93H333.6L239.46 336.57H191.99ZM78.8001 195.84L131.7 50.51H179.17L126.27 195.84H78.8001Z" fill="currentColor"/>
+<path d="M400.48 39.67L369.86 123.8H326.64L357.26 39.67H400.48ZM403.33 37.67H355.86L323.78 125.8H371.25L403.33 37.67Z" fill="currentColor"/>
+<path d="M276.39 79.44L248.36 156.45H205.14L233.17 79.44H276.39ZM279.25 77.44H231.78L202.29 158.45H249.76L279.25 77.44Z" fill="currentColor"/>
+<path d="M120.86 205.6L58.98 375.63H15.76L77.64 205.6H120.86ZM123.72 203.6H76.25L12.9 377.62H60.37L123.71 203.59L123.72 203.6Z" fill="currentColor"/>
+<path d="M194.97 2L180.87 40.75H137.65L151.75 2H194.97ZM197.82 0H150.35L134.79 42.75H182.26L197.82 0Z" fill="currentColor"/>
+<path d="M105.42 97.45L46.08 260.49H2.86L62.2 97.45H105.42ZM108.27 95.45H60.79L0 262.49H47.48L108.28 95.45H108.27Z" fill="currentColor"/>
+<path d="M234.06 346.33L224.97 371.32H181.75L190.84 346.33H234.06ZM236.91 344.33H189.44L178.89 373.32H226.36L236.91 344.33Z" fill="currentColor"/>
+<path d="M98.2574 396.189C101.594 392.482 101.295 386.773 97.589 383.436C93.8829 380.099 88.1732 380.398 84.8362 384.104C81.4992 387.81 81.7984 393.52 85.5045 396.857C89.2107 400.194 94.9204 399.895 98.2574 396.189Z" fill="currentColor"/>
+<path d="M316.963 69.127C320.3 65.4209 320.001 59.7112 316.295 56.3742C312.589 53.0371 306.879 53.3364 303.542 57.0425C300.205 60.7487 300.504 66.4583 304.211 69.7954C307.917 73.1324 313.626 72.8332 316.963 69.127Z" fill="currentColor"/>
+<path d="M93.2353 86.781C96.5723 83.0748 96.2731 77.3652 92.5669 74.0281C88.8608 70.6911 83.1511 70.9903 79.8141 74.6965C76.4771 78.4026 76.7763 84.1123 80.4824 87.4493C84.1886 90.7864 89.8983 90.4871 93.2353 86.781Z" fill="currentColor"/>
+</g>
+<defs>
+<clipPath id="markclip">
+<rect width="403.33" height="425.35" fill="white"/>
+</clipPath>
+</defs></symbol></svg>
+
+<div class="wrap">
+
+<!-- editorial chrome -->
+<header class="bar edit-only">
+  <!-- The mark goes home, on both headers. Its own attribute rather than
+       `data-go="home"`, which used to *also* end the session because the desk's Sign
+       out button carried it — one attribute meaning two things, and a logo wired to it
+       would have signed somebody out for pressing the thing every site on the internet
+       makes clickable. Sign out is `data-signout` now, so `data-go` means only
+       "switch the view"; `data-home` stays because it is what the two marks use. -->
+  <button class="mark" data-home aria-label="Mandate — home"><svg class="g" viewBox="0 0 404 426" aria-hidden="true"><use href="#mark-glyph"/></svg>Mandate</button>
+  <div class="bar-end">
+    <!-- Signed out there is one thing in this menu, so there is no menu: Theme sits in
+         the bar beside Sign in and that is two controls. Signed in it was four —
+         Leaderboard, Theme, Sign out and the address — which is the header in the
+         owner's 2026-09-08 screenshot, wrapping onto two lines on a phone.
+         `paintChrome` swaps the two states; neither shows more than two controls. -->
+    <button class="tbtn" id="theme" data-theme-cycle>Theme</button>
+    <div class="menu">
+      <!-- The address is the trigger, on both headers, for the reason the desk's
+           already was: it is the thing on screen that means "this account", so the
+           account's own controls belong under it. Written with `textContent`, so the
+           caret is a CSS triangle and not a child element — and not a character
+           either, because neither webfont carries one. -->
+      <button class="who mono" id="authmenu" aria-haspopup="true" aria-expanded="false" hidden>0x4Fe5…C08A</button>
+      <div class="menupop" id="authmenupop" role="menu" aria-labelledby="authmenu" hidden>
+        <button role="menuitem" data-go="settings" data-conn hidden>Settings</button>
+        <button role="menuitem" data-lb hidden>Leaderboard</button>
+        <button role="menuitem" data-theme-cycle data-theme-item>Theme · System</button>
+        <button role="menuitem" data-signout>Sign out</button>
+      </div>
+    </div>
+    <button class="btn sm" id="authbtn">Sign in</button>
+  </div>
+</header>
+
+<!-- terminal chrome -->
+<header class="tbar term-only">
+  <button class="mark" data-home aria-label="Mandate — home"><svg class="g" viewBox="0 0 404 426" aria-hidden="true"><use href="#mark-glyph"/></svg>Mandate</button>
+  <span class="pill up" id="dmode"><span class="dot"></span>Running</span>
+  <!-- The network, when it is not the one that matters. A testnet desk reads $0.00 on a
+       mainnet-funded account and is otherwise indistinguishable from a real one, which
+       is the mistake that wastes the most time (CLAUDE.md). It used to be the last line
+       of a right-aligned stack in the balance block; it belongs beside the mode. -->
+  <span class="pill down" id="dnet" hidden>Testnet</span>
+  <!-- The address is the way into settings — limits, this account, and leaving — which
+       is where every other product on the internet puts them (tasks/27 §7). It was a
+       span until then. -->
+  <!-- The caret is a CSS triangle, not a character: ▾ and ⌃ are in neither webfont and
+       fall back to whatever the system has, which rendered as a near-invisible dot the
+       last time one was used here. It also cannot be a child element — `session.ts`
+       writes the address with `textContent`, which would delete one. -->
+  <!-- Right-aligned, and the only control in this bar. It was the address plus three
+       buttons, which wrapped onto a second line at 390px. -->
+  <div class="menu bar-end">
+    <button class="who mono" id="dwho" aria-haspopup="true" aria-expanded="false" aria-label="This account">0x4Fe5…C08A</button>
+    <div class="menupop" id="dwhopop" role="menu" aria-labelledby="dwho" hidden>
+      <button role="menuitem" data-go="settings">Settings</button>
+      <button role="menuitem" data-lb hidden>Leaderboard</button>
+      <button role="menuitem" data-theme-cycle data-theme-item>Theme · System</button>
+      <!-- Signing out was `data-go="home"`, which main.ts wired to end the session as
+           well as switch the view — one attribute meaning two things, and the reason
+           two other files carry a comment warning not to use it for navigation. It is
+           `data-signout` now and means only that. -->
+      <button role="menuitem" data-signout>Sign out</button>
+    </div>
+  </div>
+</header>
+
+<!--@INCLUDE views/home.html@-->
+
+<!--@INCLUDE views/connect.html@-->
+<!--@INCLUDE views/desk.html@-->
+<!--@INCLUDE views/settings.html@-->
+
+<!--@INCLUDE views/leaderboard.html@-->
+
+</div>
+
+<!-- Outside `.wrap` so its rule runs the full width, and so the wrap's own 140px of
+     bottom padding becomes the gap above it rather than a void below it. It is not
+     view-scoped: it sits under the home page, the connect flow, the desk, settings and
+     the leaderboard alike, because "where do I find these people" is a question from
+     every one of those screens — which is also why it is here and not in views/. -->
+<footer class="foot">
+  <div class="foot-in">
+    <div>
+      <div class="mark"><svg class="g" viewBox="0 0 404 426" aria-hidden="true"><use href="#mark-glyph"/></svg>Mandate</div>
+      <p>Non-custodial execution for Quotient's outlooks on your own Hyperliquid account.</p>
+    </div>
+    <div class="foot-end">
+      <a class="btn ghost sm flink" href="https://x.com/MandateMarkets" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 1200 1227" aria-hidden="true"><path d="M714.163 519.284 1160.89 0h-105.86L667.137 450.887 357.328 0H0l468.492 681.821L0 1226.37h105.866l409.625-476.152 327.181 476.152H1200L714.137 519.284h.026ZM569.165 687.828l-47.468-67.894-377.686-540.24h162.604l304.797 435.991 47.468 67.894 396.2 566.721H892.476L569.165 687.854v-.026Z"/></svg>
+        <span>@MandateMarkets</span>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<!-- Wallet picker.
+     Shown when more than one wallet announces itself under EIP-6963, and reused to
+     explain an empty list. It is not decoration: `window.ethereum` is whichever wallet
+     injected last, and the address that comes back becomes the account we manage and
+     freeze baseCapital against. Choosing is the only way to make that deliberate. -->
+<div class="wpick" id="wpick" hidden role="dialog" aria-modal="true" aria-labelledby="wpickh">
+  <div class="wpick-box card">
+    <h3 id="wpickh">Which wallet?</h3>
+    <p class="hint" id="wpickwhy"></p>
+    <div class="wpick-list" id="wpicklist"></div>
+    <button class="btn ghost sm" id="wpickno">Cancel</button>
+  </div>
+</div>
+
+<!-- Share (tasks/16 §5). One dialog, reused by every share button on the page: the
+     preview is the real PNG a scraper will fetch, so what the owner approves here is
+     exactly what gets published.
+
+     The dollars checkbox is not a display toggle. The server signs two links when the
+     button is pressed — one carrying the amount and one that does not carry it at all,
+     not even in the query — and this swaps between them. So "off" is a promise about
+     the link, not about the drawing. -->
+<div class="dlg" id="sharedlg" hidden role="dialog" aria-modal="true" aria-labelledby="sharedlgh">
+  <div class="dlgbox">
+    <div class="dlghead">
+      <h3 id="sharedlgh">Share</h3>
+      <button class="dlgx" id="sharedlgx" aria-label="Close" title="Close">&times;</button>
+    </div>
+    <div class="dlgprev" id="sharedlgprev"><img id="shareimg" alt="A preview of the card this link will show" width="1200" height="630"></div>
+    <label class="dlgcheck" id="sharedollarslabel">
+      <input type="checkbox" id="sharedollars">
+      <span>Dollar P/L on the card</span>
+      <em id="sharedollarsnote"></em>
+    </label>
+    <input class="shareurl mono" id="shareurl" readonly aria-label="The link to share">
+    <div class="sharerow" id="sharerow">
+      <button class="btn ghost sm" id="sharecopy">Copy card link</button>
+      <button class="btn ghost sm" id="sharecopyimg">Copy image</button>
+      <a class="btn ghost sm" id="sharex" target="_blank" rel="noopener noreferrer">Post on X</a>
+      <a class="btn ghost sm" id="sharetg" target="_blank" rel="noopener noreferrer">Send on Telegram</a>
+    </div>
+    <div class="sharemsg" id="sharemsg" hidden></div>
+  </div>
+</div>
+
+<script>
+/*@SCRIPT@*/
+</script>

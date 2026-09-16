@@ -1,0 +1,49 @@
+/* ── Footer ────────────────────────────────────────────────────────
+   The page shipped with no `a href` in it at all: nothing linked out, and a reader who
+   wanted to find us had nowhere to go. `notes/2026-09-03-marketing-findings.md`
+   measured what a stranger gets from mandate.markets and this was not on the list,
+   because that list was about robots; a person looking for the account behind the site
+   is the other half of the same problem, and the queue's own boost asks people to post
+   about us on X.
+
+   Deliberately two things and no more.
+
+   **No terms.** The read a terms page would have to be written against is
+   `docs/STATUS.md` item 14 — discretionary management of third-party funds *for a fee*
+   is a regulated activity in most jurisdictions even when non-custodial. We charge
+   nothing, so it is not live exposure today, and a terms page does not advance that
+   item. Writing one before the read is how a page ends up claiming something the code
+   does not enforce.
+
+   **And no numbers.** Every figure on this page is pinned to `src/risk/params.ts` by
+   `src/web/discovery.test.ts`. A footer is the one place a stale one would sit
+   unnoticed for months, so it states the rule and quotes none of them. */
+.foot{border-top:1px solid var(--rule); position:relative; z-index:var(--z-page)}
+/* Gutters that match `.wrap`'s, including its safe-area insets — the footer is outside
+   `.wrap`, so it does not inherit them and would otherwise run under the home
+   indicator (tasks/26 §6.5). The desk widens `.wrap`, and the rule under the footer
+   has to line up with the content above it there too. */
+.foot-in{max-width:1120px; margin:0 auto;
+  padding:32px max(40px,env(safe-area-inset-right)) calc(56px + env(safe-area-inset-bottom))
+          max(40px,env(safe-area-inset-left));
+  display:flex; align-items:flex-start; gap:28px; flex-wrap:wrap}
+body.term .foot-in{max-width:1180px}
+.foot .mark{font-size:16.5px}
+.foot p{margin:11px 0 0; font-size:13.5px; line-height:1.6; color:var(--dim); max-width:44em}
+.foot-end{margin-left:auto; display:flex; align-items:center; gap:8px}
+/* The link is a `.btn ghost sm`, not a control of its own: that carries the 44px target,
+   the hover behind `@media (hover:hover)` and the focus ring, all of which a bespoke
+   footer link would have had to restate and one of which it would have got wrong.
+   Inline markup rather than a hosted image — `img-src 'self' data:` would refuse one —
+   and `fill:currentColor` is what carries the mark into both themes. */
+.flink svg{width:12px; height:12px; fill:currentColor; flex:none; margin-right:8px}
+
+@media (max-width:860px){
+  .foot-in{padding-left:max(28px,env(safe-area-inset-left)); padding-right:max(28px,env(safe-area-inset-right))}
+  /* The link wraps under the paragraph somewhere below this width, and there
+     `margin-left:auto` would strand it against the right edge of its own line. */
+  .foot-end{margin-left:0}
+}
+@media (max-width:560px){
+  .foot-in{padding-left:max(20px,env(safe-area-inset-left)); padding-right:max(20px,env(safe-area-inset-right))}
+}

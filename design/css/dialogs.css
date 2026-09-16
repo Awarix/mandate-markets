@@ -1,0 +1,63 @@
+/* The share dialog. One at a time, centred, over a scrim — a card is going to be
+   published, so it gets a considered moment rather than a panel that unfolds under a
+   row and pushes the page around. The preview is the real PNG the scraper will fetch,
+   at the size it will be seen. */
+.dlg{position:fixed; top:0; right:0; bottom:0; left:0; z-index:var(--z-dialog);
+  display:flex; align-items:center; justify-content:center; padding:24px;
+  background:rgba(6,5,4,.72)}
+.dlgbox{width:min(680px,100%); max-height:calc(100vh - 48px); overflow:auto;
+  background:var(--panel); border:1px solid var(--rule-2); border-radius:8px;
+  box-shadow:0 24px 60px rgba(0,0,0,.5); padding:22px 24px 24px}
+.dlghead{display:flex; align-items:center; gap:12px; margin-bottom:16px}
+.dlghead h3{margin:0; font-size:19px; letter-spacing:-.02em; font-weight:600}
+.dlgx{margin-left:auto; background:none; border:none; color:var(--dim); cursor:pointer;
+  font:inherit; font-size:22px; line-height:1; padding:4px 6px; border-radius:4px}
+@media (hover:hover){ .dlgx:hover{color:var(--ink); background:var(--panel-2)} }
+/* A plain mount, deliberately. The frame and the accent rail are **inside the PNG**
+   since 2026-09-05 — they were CSS here first, which meant the preview flattered the
+   card with a border the card did not have, and a card travels without this page. */
+.dlgprev{border-radius:6px; overflow:hidden; background:var(--ground)}
+.dlgprev img{display:block; width:100%; height:auto; border-radius:3px; background:var(--ground)}
+.dlgprev.wait{opacity:.45}
+.dlgcheck{display:flex; align-items:center; gap:10px; margin:16px 0 6px;
+  font-size:14px; cursor:pointer}
+.dlgcheck input{width:17px; height:17px; accent-color:var(--accent); cursor:pointer; flex:none}
+.dlgcheck em{font-style:normal; color:var(--dim); font-size:13px}
+/* 16px for the same reason as input[type=text]: readonly is still focusable, and a
+   tap to select the link would zoom the dialog. Scaled back down visually, which the
+   zoom heuristic does not read. */
+.shareurl{width:100%; display:block; margin:12px 0 12px;
+  background:var(--ground-2); color:var(--ink-2); border:1px solid var(--rule);
+  border-radius:4px; padding:9px 10px; font-size:16px; transform-origin:left center}
+@media (min-width:721px){ .shareurl{font-size:12px} }
+.sharerow{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+.sharerow .btn{text-decoration:none; display:inline-flex; align-items:center}
+/* Two states, one box: what the card carries, and — in red — why there is no card
+   ("that position has not filled yet"), in the server's own words. */
+.sharemsg{margin-top:14px; padding:12px 14px; border-radius:5px; font-size:13px;
+  line-height:1.5; color:var(--down); border:1px solid var(--down); background:var(--down-soft)}
+.sharemsg.quiet{color:var(--dim); border-color:var(--rule); background:var(--ground-2)}
+/* The per-item control. Quiet until the row is hovered — it is on every position and
+   every closed trade, and three loud buttons down the page would out-shout the P&L. */
+.sharebtn{background:none; border:none; color:var(--dim); font:inherit; font-size:12.5px;
+  font-weight:500; cursor:pointer; padding:4px 8px; border-radius:4px; letter-spacing:.01em}
+@media (hover:hover){ .sharebtn:hover{color:var(--ink); background:var(--panel-2)} }
+.sharebtn:disabled{opacity:.4; cursor:not-allowed}
+
+/* ── Wallet picker ───────────────────────────────────────────────── */
+/* .wpick sets display:flex, which beats the `hidden` attribute's UA rule, so hiding
+   has to be stated. Getting this wrong shows the overlay on every page load. */
+.wpick{position:fixed; inset:0; z-index:var(--z-dialog); display:flex; align-items:center;
+  justify-content:center; padding:24px; background:rgba(0,0,0,.5)}
+.wpick[hidden]{display:none}
+.wpick-box{width:100%; max-width:430px; padding:26px 28px}
+.wpick-box h3{font-size:19px; font-weight:500; margin:0 0 4px; letter-spacing:-.01em}
+.wpick-list{display:flex; flex-direction:column; gap:8px; margin:18px 0 16px}
+.wopt{display:flex; align-items:center; gap:12px; width:100%; text-align:left; font:inherit;
+  font-size:15px; padding:12px 14px; border-radius:5px; cursor:pointer; color:var(--ink);
+  background:none; border:1px solid var(--rule-2)}
+@media (hover:hover){ .wopt:hover{background:var(--panel-2); border-color:var(--ink-2)} }
+.wopt img{width:26px; height:26px; border-radius:6px; flex:none}
+.wdot{width:26px; height:26px; border-radius:6px; flex:none; background:var(--panel-2)}
+.wopt .wname{display:block}
+.wopt .rdns{display:block; font-family:"Tabular",ui-monospace,monospace; font-size:11px; color:var(--dim)}

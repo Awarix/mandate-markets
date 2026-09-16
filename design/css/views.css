@@ -1,0 +1,8 @@
+/* ── View switching ──────────────────────────────────────────────── */
+/* Must come after .tbar/.bar, which also set display and would otherwise win on order. */
+.term-only{display:none}
+body.term .term-only{display:flex}
+body.term .edit-only{display:none}
+.card{box-shadow:var(--lift),var(--shadow)}
+.pcard{box-shadow:var(--lift),var(--shadow)}
+

@@ -1,0 +1,50 @@
+/*@FONTFACES@*/
+:root{
+  --ground:#EFECE5; --ground-2:#F5F3EE; --panel:#F9F8F4; --panel-2:#E9E6DE;
+  --rule:#DFDBD0; --rule-2:#C6C0B1;
+  --ink:#16140F; --ink-2:#4C483F; --dim:#6B6656;
+  --accent:#2C3A57; --accent-2:#1D2840; --accent-soft:#E4E7EE; --accent-line:rgba(44,58,87,.30);
+  --up:#1F6E4C; --down:#A63A2B; --up-soft:#DFEAE3; --down-soft:#F3E3DE;
+  --up-line:rgba(31,110,76,.22); --up-fill:rgba(31,110,76,.13);
+  --warn:#8A6A1E;
+  --shadow:0 1px 2px rgba(22,20,15,.04); --lift:0 0 #0000;
+  --bloom-a:rgba(198,192,177,.34); --bloom-b:rgba(176,170,152,.22);
+  --grain:.034; --btn-bg:#16140F; --btn-ink:#F7F5F0;
+  /* One scale, four rungs, and nothing outside it. The grain deliberately sits above
+     the dialogs: it is the paper the whole page is printed on. */
+  --z-bloom:0; --z-page:1; --z-sticky:2; --z-dialog:200; --z-grain:300;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#0C0B0A; --ground-2:#100E0C; --panel:#15130F; --panel-2:#1C1915;
+  --rule:#272219; --rule-2:#3A342A;
+  --ink:#EDEAE2; --ink-2:#ABA495; --dim:#867E6E;
+  --accent:#A7B8D6; --accent-2:#8496B8; --accent-soft:#191C24; --accent-line:rgba(167,184,214,.34);
+  --up:#5FB98C; --down:#D4705C; --up-soft:#12271E; --down-soft:#2A1713;
+  --up-line:rgba(95,185,140,.26); --up-fill:rgba(95,185,140,.18);
+  --warn:#C89A4A;
+  --shadow:0 1px 2px rgba(0,0,0,.45); --lift:0 0 #0000;
+  --bloom-a:rgba(78,66,50,.36); --bloom-b:rgba(52,48,42,.26);
+  --grain:.05; --btn-bg:#EDEAE2; --btn-ink:#0C0B0A;
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --ground:#0C0B0A; --ground-2:#100E0C; --panel:#15130F; --panel-2:#1C1915;
+  --rule:#272219; --rule-2:#3A342A;
+  --ink:#EDEAE2; --ink-2:#ABA495; --dim:#867E6E;
+  --accent:#A7B8D6; --accent-2:#8496B8; --accent-soft:#191C24; --accent-line:rgba(167,184,214,.34);
+  --up:#5FB98C; --down:#D4705C; --up-soft:#12271E; --down-soft:#2A1713;
+  --up-line:rgba(95,185,140,.26); --up-fill:rgba(95,185,140,.18);
+  --warn:#C89A4A;
+  --shadow:0 1px 2px rgba(0,0,0,.45); --lift:0 0 #0000;
+  --bloom-a:rgba(78,66,50,.36); --bloom-b:rgba(52,48,42,.26);
+  --grain:.05; --btn-bg:#EDEAE2; --btn-ink:#0C0B0A;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none !important}   /* author `display` otherwise beats the UA rule */
+html{-webkit-text-size-adjust:100%}
+body{margin:0; background:var(--ground); color:var(--ink);
+  font-family:"General Sans",system-ui,-apple-system,sans-serif; font-size:16px; line-height:1.6;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility}
+

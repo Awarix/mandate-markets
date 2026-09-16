@@ -1,0 +1,380 @@
+<!-- ═══════════ CONNECT ═══════════ -->
+<section id="v-connect" hidden>
+  <div style="max-width:640px; padding:24px 0 34px">
+    <h1 style="font-size:clamp(28px,4.4vw,40px)" id="ch1">Four steps, once.</h1>
+    <p class="sub" style="font-size:17px" id="csub">Then you are done with this screen for good.</p>
+  </div>
+
+  <!-- One button, in one place, for the whole chain.
+       There used to be two: a disabled "Create my key and approve" inside step 3's card
+       on the right, and an "Approve in your wallet" that appeared in step 4 on the left
+       once the first had done its work. Neither was where somebody was looking when it
+       became the thing to press, and between them sat a wait nobody had asked for.
+
+       So the four steps below are explanation, and this is the action: it reads the
+       state, says what happens next in the words of the thing that happens next, and
+       carries on to the end — fund, approve the fee, mint the key, approve the agent.
+       Every one of those is still refusable on its own and nothing here is the only way
+       through: the manual routes are all still on the page. -->
+  <!-- The breadcrumbs (`tasks/38` §2). They are what makes a carousel acceptable here:
+       a bare one shows a single panel and hides the other three, so somebody cannot see
+       what they are agreeing to before they start agreeing. These put the shape back —
+       how many stops there are, which one you are on, how much is left — while the prose
+       paginates. Rendered from the same `stepState` the old vertical rail used, so there
+       is one idea of "where am I" and not two. -->
+  <nav class="crumbs" id="ccrumbs" hidden aria-label="Connect steps">
+    <ol id="ccrumblist"></ol>
+  </nav>
+
+  <div class="cact" id="cact" hidden>
+    <div id="cactfund" hidden>
+      <label class="f"><span class="l">Deposit</span>
+        <input type="text" id="cdepamt" inputmode="decimal" spellcheck="false" placeholder="50.00"></label>
+      <div class="hint" id="cdepbal"></div>
+      <div id="cdepdec"></div>
+    </div>
+    <!-- The referral code (`tasks/37` §7.5). In the card rather than in its own panel,
+         for the reason the deposit box is: the control for the step you are standing on
+         belongs where the button is, and the panel below stays explanation. Having it in
+         both places is what the owner met on 2026-09-10 and called "weird". -->
+    <div id="cactref" hidden>
+      <label class="f"><span class="l">Referral code</span>
+        <input type="text" id="crefcode" spellcheck="false" autocapitalize="characters" maxlength="20"></label>
+    </div>
+    <button class="btn cgo" id="cgo">Sign in with your wallet</button>
+    <!-- Skipping is a real answer and needs a real control. An offer that cannot be
+         declined is not an offer, and declining here costs its owner 4% of Hyperliquid's
+         fee and nothing else — the account trades identically either way. -->
+    <button class="btn ghost sm" id="crefskip" hidden style="margin-top:10px">Skip this</button>
+    <div class="hint" id="cgosub"></div>
+    <!-- The referral used to be a line here, pointing at Hyperliquid's own site. It is
+         step 4 now and the agent signs it (`tasks/37` §7.5); this element stays as the
+         card's one-line summary of what that step decided. -->
+    <div class="note" id="cref" hidden style="margin-top:16px"></div>
+    <div id="cgoflow"></div>
+    <div class="hint" id="cgoerr" hidden style="color:var(--down)"></div>
+  </div>
+
+  <!-- The four steps, one panel at a time on a phone and all four in a column on a
+       desktop wide enough to hold them (`tasks/38` §2). The panels are the *explanation*;
+       the action card above is the action, and it does not move.
+
+       ⚠ Each panel keeps its own safety sentence — "it authorised nothing", "cannot
+       withdraw", "revoke it on Hyperliquid any time". They are deliberately not
+       collected into a panel of their own: paginating must never turn the reassurance
+       into something a person meets *after* deciding. -->
+  <!-- The access queue (tasks/17). Not a numbered step: it is the door, and the four
+       steps are what is behind it. Shown when this address has not been admitted, and
+       replaced by the steps when it has. -->
+  <div id="cqueue" hidden>
+    <div class="qwrap">
+      <!-- No count of anybody else, deliberately: not how many are waiting and not how
+           many accounts are trading. A queue that publishes its own length is either
+           bragging or apologising, and both read badly to the one person it is talking
+           to. What is theirs is their own place. -->
+      <div class="qhead" id="qhead">
+        <div>
+          <div class="kicker">Your place</div>
+          <div class="qpos num" id="qpos">—</div>
+        </div>
+      </div>
+
+      <div class="note" id="qnote" style="margin-top:18px"></div>
+
+      <div id="qjoinwrap" style="margin-top:20px">
+        <button class="btn" id="qjoin">Take my place in line</button>
+        <div class="hint" id="qjoinerr" hidden style="color:var(--down)"></div>
+      </div>
+
+      <div id="qboosts" hidden>
+        <!-- The X link is its own thing rather than part of the post, because it is now
+             what both boosts run on: a post is checked against it, and a referral counts
+             when the person you brought has one. -->
+        <div class="qboost" id="qxboost">
+          <div class="qb-t">Link your X account</div>
+          <div class="qb-d">Both of the things below need it. We ask X only who you are —
+            no posting, no following, nothing kept but your handle.</div>
+          <div id="qxlink">
+            <button class="btn ghost sm" id="qxgo">Link my X account</button>
+          </div>
+          <div class="note good" id="qxdone" hidden></div>
+        </div>
+
+        <div class="qboost" id="qpostboost">
+          <div class="qb-t">Post about Mandate</div>
+          <!-- What is checked is stated exactly, now that both halves are actually
+               checked: X tells us who wrote the post, and its links come back with it. -->
+          <div class="qb-d">A post moves you past everyone who has not posted. Here is a draft —
+            <strong>say whatever you like in it</strong>; the only part we need is the link to
+            us. <strong>We check that the post is yours and that it links here.</strong>
+            One post, once.</div>
+          <div id="qpostwrap" hidden>
+            <a class="btn ghost sm" id="qdraft" target="_blank" rel="noopener noreferrer">Open the draft on X</a>
+            <label class="f" style="margin-top:16px"><span class="l">Then paste your post</span>
+              <input type="text" id="qposturl" spellcheck="false" placeholder="https://x.com/you/status/1234567890"></label>
+            <button class="btn ghost sm" id="qpostgo">Check it</button>
+            <div class="hint" id="qposterr" hidden style="color:var(--down)"></div>
+          </div>
+          <div class="hint" id="qpostneedslink" hidden>Link your X account above first.</div>
+          <div class="note good" id="qposted" hidden><strong>Verified.</strong> You are ahead of
+            everyone who has not posted.</div>
+        </div>
+
+        <div class="qboost">
+          <div class="qb-t">Bring someone</div>
+          <!-- No cap is stated because there is none. Somebody with an audience who
+               posts this link brings many people, which is the outcome worth having;
+               "the first three count" would be an insult dressed as a rule. -->
+          <div class="qb-d">Every person who takes a place through your link and links their X
+            account moves you up. There is no limit on how many.</div>
+          <!-- The link is the thing to be taken away from this screen, so it is given the
+               weight of an object rather than a form field: its own card, the address in
+               the tabular face, and one button. -->
+          <div class="card qrefcard">
+            <div class="kicker">Your invite link</div>
+            <input type="text" id="qref" readonly spellcheck="false">
+            <div class="qrefrow">
+              <button class="btn ghost sm" id="qrefcopy">Copy link</button>
+              <span class="hint" id="qrefcount"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hint" id="qfunded" style="margin-top:18px"></div>
+    </div>
+  </div>
+
+  <div class="ctrack" id="ctrack">
+  <div class="step" id="cs1">
+    <h3>Sign in with your wallet</h3>
+    <div class="d" id="c1d">Signing proves you control the address. It authorises nothing and cannot
+      move funds.</div>
+  </div>
+
+  <div class="step" id="cs2">
+    <h3>Fund a fresh Hyperliquid account</h3>
+    <div class="d">A new account, not one you already trade on. <strong>Your deposit is your
+      size.</strong> We manage all of it — there is no ceiling, and no part of it sits idle.
+      <strong>You do not need a Hyperliquid account first</strong> — depositing makes one, and the
+      box above does it from here.</div>
+    <div class="bx">
+      <div class="kv"><span class="k">Deposit at least</span>
+        <span class="mono" id="cminfund">$40.00</span></div>
+      <div class="kv"><span class="k">We trade</span>
+        <span class="mono">all of it</span></div>
+      <div class="kv"><span class="k">A bad day pauses the account at</span>
+        <span class="mono" id="cdaily">10%</span></div>
+      <div class="hint" style="margin-top:10px">Deposit $60 and we trade $60; deposit $600 and we
+        trade $600. What there is instead of a ceiling is a <strong>floor</strong>: below
+        <span class="mono" id="cminfund2">$40.00</span> a single position is worth less than the
+        <span class="mono" id="cminnotional">$10</span> minimum Hyperliquid accepts, so every signal
+        is skipped and the account trades nothing while looking perfectly connected. The exact floor
+        depends on the limits you set next — step 3 shows it, and tells you if you are under it.</div>
+      <!-- What this said until 2026-09-10: "Put it in the perp wallet, not spot… money
+           in spot is money we cannot trade." It was false for Hyperliquid's own Deposit
+           button, which lands in spot on a unified account where it is collateral — so
+           the screen told people off for doing it right. It is not reworded into a
+           narrower warning, because there is nothing left to warn about: the desk sets
+           the margin mode itself when it connects, and both balances count from then on
+           (`src/hl/abstraction.ts`). -->
+      <div class="note" id="cspotwarn" style="margin-top:14px"><strong>Spot or perp — either is
+        fine.</strong> Hyperliquid keeps two balances, and whether the spot one counts as collateral
+        depends on a setting. We set it: when the desk connects your account it switches on unified
+        margin, where both count. There is nothing for you to move. Once you are signed in, the line
+        below says what we can actually see.</div>
+      <div class="note" id="cbal" hidden style="margin-top:14px"></div>
+    </div>
+  </div>
+
+  <!-- Hyperliquid's referral code (`tasks/37`). A step now, not a line: until
+       2026-09-10 this was a sentence pointing at Hyperliquid's own site, because we
+       refused to have our agent sign a thing that pays us. §7.5 overturned that on the
+       strength of the button — an editable box, one button to apply and one to skip, is
+       explicit consent in our own UI, and the agent is only the transport.
+
+       It renders **only** for an account with no code at all, which is the state every
+       account this flow creates is in and most arrivals from Hyperliquid are not: both
+       major wallets claim the one-per-account slot at their own connect step,
+       permanently, and telling somebody to change a code they cannot change is worse
+       than silence.
+
+       The box is editable and preset to ours on purpose: a stranger's code is as
+       welcome as ours — they get their 4% and we get nothing — and a preset nobody can
+       change would be a toll rather than an offer. -->
+  <div class="step" id="csref" hidden>
+    <h3>Take 4% off Hyperliquid's fees</h3>
+    <div class="d">It cuts <strong>Hyperliquid's own fee</strong> on every trade, ours included,
+      for your first $25M of volume. An account carries one code, permanently —
+      <strong>ours is filled in, and you can use anyone's instead.</strong> Skipping changes
+      nothing else.</div>
+    <div class="bx">
+      <div class="note" id="crefstate" hidden></div>
+    </div>
+  </div>
+
+  <div class="step" id="cs3">
+    <h3>Set your limits</h3>
+    <div class="d" id="c3d">Three numbers and one choice, shown in dollars before you commit. You choose them now,
+      because the authority you grant in step 4 is bounded by them. Each position freezes them when it
+      opens; you can change them for the next one from the desk.</div>
+    <div class="bx g2">
+      <div class="card pad">
+        <div class="kicker" style="font-size:12px">Leverage</div>
+        <div class="seg" id="lev" style="margin-top:10px">
+          <button data-l="5">5×</button><button data-l="10" aria-pressed="true">10×</button><button data-l="18">18×</button><button data-l="20">20×</button></div>
+        <div style="margin-top:22px; display:flex; justify-content:space-between; align-items:center">
+          <span class="kicker" style="font-size:12px">Stop loss</span>
+          <label class="toggle"><input type="checkbox" id="stopon" checked><span class="sw"></span></label>
+        </div>
+        <div id="sg" style="margin-top:10px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:7px">
+            <span style="color:var(--dim);font-size:14px">Distance from entry</span>
+            <span class="num" id="sv" style="font-size:16px">2.0%</span></div>
+          <input type="range" id="sp" min="1" max="8" step="0.5" value="2">
+        </div>
+        <div style="margin-top:22px; display:flex; justify-content:space-between; align-items:center">
+          <span class="kicker" style="font-size:12px">Per position</span>
+          <span class="num" id="pv" style="font-size:16px">10%</span></div>
+        <input type="range" id="ps" min="5" max="25" step="1" value="10" style="margin-top:8px">
+        <!-- The exit choice. "Goes neutral" and not "withdraws the forecast": a call
+             leaves our book when its side turns null, its status leaves active, or the
+             series is gone, and the first is the ordinary one — the feed runs ~95%
+             no-direction. Locked until SITE_OFFERS.holdToTargetOpensAt, and the lock is
+             enforced in parseSettings, not here; this is the courtesy half. -->
+        <!-- Both descriptions stay on screen, rather than one hint that swaps with the
+             selection: the second option is disabled, so a swapping hint could never be
+             read at all. -->
+        <div class="exp">
+          <div class="exp-h">
+            <span class="kicker" style="font-size:12px">Exit behaviour</span>
+            <span class="exp-tag">Experimental</span>
+          </div>
+          <div class="seg" id="exitp">
+            <button data-h="0" aria-pressed="true">Signal change</button><button data-h="1" disabled>Target hit</button></div>
+          <div class="exp-opt"><b>Signal change</b> — when Quotient's status moves from a direction to
+            neutral, the position is closed at market on the next poll.</div>
+          <div class="exp-opt"><b>Target hit</b> — the position is held until your target or your
+            stop-loss is hit. If Quotient moves from a direction to neutral — long to neutral, say — nothing
+            happens and the position runs on. <b>Opens 9 September</b>, once we have measured the current
+            behaviour.</div>
+        </div>
+      </div>
+      <div class="card pad">
+        <div class="kicker" style="font-size:12px; margin-bottom:14px">What it costs you</div>
+        <div class="kv"><span class="k">Your mandate</span><span id="cmandate">$100.00</span></div>
+        <div class="kv"><span class="k">Committed per position</span><span id="cm">$9.90</span></div>
+        <div class="kv"><span class="k">Exposure it buys</span><span id="cn">$99.00</span></div>
+        <!-- tasks/21 §8: the number the card never showed, which is why the size
+             slider looked as though it did nothing above 10%. -->
+        <div class="kv"><span class="k">Positions that fit</span><span id="ccount">10</span></div>
+        <div class="kv"><span class="k">If they all lose together</span><span class="down" id="ccorr">$29.70</span></div>
+        <div class="kv"><span class="k">A losing position costs</span><span class="down" id="cl">$2.97</span></div>
+        <div class="kv"><span class="k">Losses before we pause</span><span id="cs">3.4</span></div>
+        <div class="kv"><span class="k">Needs a deposit of at least</span><span class="mono" id="cfloor">$10.11</span></div>
+        <div class="note" id="cnote" style="margin-top:16px"></div>
+        <!-- tasks/33: what the desk charges, stated before the button that asks for the
+             signature — not after it, and not on a screen most people never open. Empty
+             and hidden unless this account has to approve one. -->
+        <div class="note" id="cfee" hidden style="margin-top:16px"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step" id="cs4">
+    <h3>Approve our agent</h3>
+    <div class="d">We generate the signing key on our server and keep it encrypted — it never
+      travels, and you never handle one. Your wallet signs the approval here, and we show you
+      what it says in plain words while it asks. What it approves can place orders on your account and
+      <strong>cannot withdraw</strong>. Revoke it on Hyperliquid any time and we stop that
+      second.</div>
+    <div class="bx">
+      <!-- The wait between "create" and "approve", which is the desk's loop and not
+           something the page can hurry: the key is minted by the process that holds the
+           keystore passphrase, and this one deliberately does not. `cmintchain` is the
+           sentence that is only true when the page is going to open the wallet itself —
+           a reload loses that, and then the button below is the way through. -->
+      <div id="cminting" hidden><div class="note"><span class="mono">Creating your agent key…</span>
+        Up to a minute. Our desk mints it and seals it there, so you never handle one.
+        <span id="cmintchain"></span></div></div>
+
+      <!-- Renewal arrives here from the desk, at the same address and the same
+           Hyperliquid page. Shown instead of the "Connected" card so nobody reads a
+           re-approval as a fresh connection. -->
+      <div class="note warn" id="crenew" hidden style="margin-bottom:16px"><strong>Renewing your
+        approval.</strong> This is the same agent address you approved before, and the same key —
+        nothing new is created. Hyperliquid has no "extend" button, and it <strong>refuses to
+        re-approve an address it still holds</strong>, so on its API page <strong>remove the
+        existing entry first</strong> and then approve this address again. Set <span
+        class="mono">Days Valid</span> to <span class="mono">MAX</span> (180); left blank it
+        grants about a day. Nothing about your account or your limits changes, and no position is
+        touched.</div>
+
+      <!-- One button, because there is nothing here for anybody to make. The agent key
+           was minted and sealed on our server the moment step 3 was submitted; the
+           address below only ever existed so it could be pasted into somebody else's
+           form. The wallet that is already signed in can sign the approval where it is.
+
+           The manual route is kept behind a link rather than deleted: granting trading
+           rights on Hyperliquid's own domain is a genuine trust anchor for a cautious
+           person, and this page is public. Same argument as design/src/renew.ts. -->
+      <!-- `capprovego` is the renewal's button and only the renewal's: a first approval
+           is one link in the chain the card at the top is running, and a second button
+           for the same signature is what this screen had before. The manual route is
+           still here, and still an equal citizen. -->
+      <div id="capprove" hidden>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center">
+          <button class="btn" id="capprovego" hidden>Approve in your wallet</button>
+          <button class="btn ghost sm" id="capprovemanual">Do it on Hyperliquid instead</button>
+        </div>
+        <div id="capproveflow"></div>
+        <div class="note" id="capprovehint" style="margin-top:16px">Your wallet will ask you to
+          sign one message, for Hyperliquid's maximum of 180 days. It lets us place orders on
+          your account and <strong>cannot move money out</strong>. Then leave this page open — we
+          check every minute and connect you as soon as it is approved and the account is
+          funded.</div>
+
+        <div id="cmanual" hidden style="margin-top:16px">
+          <label class="f"><span class="l">Approve this address</span>
+            <input type="text" id="cagent" readonly spellcheck="false"></label>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center">
+            <button class="btn ghost sm" id="ccopy">Copy address</button>
+            <a class="btn ghost sm" id="chl" href="https://app.hyperliquid.xyz/API" target="_blank" rel="noopener noreferrer">Open Hyperliquid</a>
+          </div>
+          <div class="note" style="margin-top:16px">On Hyperliquid's API page, paste this address,
+            set <span class="mono">Days Valid</span> to <span class="mono">MAX</span> — blank
+            grants about a day — and approve it. We check every minute and connect you as soon as
+            it is approved and the account is funded.</div>
+        </div>
+        <div class="note warn" id="cerr" hidden style="margin-top:12px"></div>
+      </div>
+
+      <div id="cactive" hidden>
+        <div class="note good" id="cactivenote"><strong>Connected.</strong> Your limits are frozen
+          and the desk is managing this account.</div>
+      </div>
+
+      <div class="note warn" id="cdown" hidden style="margin-top:12px"><strong>The desk is not
+        responding.</strong> Your request is saved and will be picked up when it is back.</div>
+
+      <!-- Backing out. Nothing has been traded at this point — no account row exists and
+           no order was ever placed — but the agent key is minted and the desk retries
+           this address every minute until it is told to stop. -->
+      <!-- The web tier cannot let go on its own: it records the request and the executor
+           acts on its next pass. Without this the Cancel button simply vanished when it
+           was pressed, which reads as a page that ate the click. -->
+      <div class="note" id="ccancelling" hidden style="margin-top:18px"><strong>Cancelling.</strong>
+        The desk lets go on its next pass, usually within a minute. Nothing was traded.</div>
+
+      <div id="ccancelwrap" hidden style="margin-top:18px">
+        <button class="btn ghost sm" id="ccancel">Cancel this connection</button>
+        <div class="hint" style="margin-top:8px">Stops the desk trying to connect this
+          account. Nothing has been traded and no funds move. You can start again any
+          time, and if you already approved our agent on Hyperliquid you can revoke it
+          there.</div>
+        <div class="hint" id="ccancelerr" hidden style="color:var(--down)"></div>
+      </div>
+    </div>
+  </div>
+  </div>
+</section>

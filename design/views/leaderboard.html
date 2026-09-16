@@ -1,0 +1,24 @@
+<!-- ═══════════ LEADERBOARD ═══════════ -->
+<!-- The only screen here that draws an account other than the reader's own, which is
+     why the route behind it wants a session *and* a live account: everybody who can
+     read this table is on it. `src/web/leaderboard.ts` argues what it may carry and
+     which accounts are listed. -->
+<section id="v-leaderboard" hidden>
+  <div style="max-width:720px; padding:24px 0 22px">
+    <h1 style="font-size:clamp(28px,4.4vw,40px)">Every account we trade.</h1>
+    <p class="sub" style="font-size:17px">Ranked on return, settled from each account’s own
+      fills on Hyperliquid. Ours is in here on the same terms as everybody else’s — and
+      only the owners of these accounts can see this page.</p>
+  </div>
+
+  <div class="sechead">
+    <h2>Results</h2>
+    <span class="secmeta" id="lbmeta"></span>
+    <span class="sp"></span>
+    <button class="btn ghost sm" id="lbrefresh">Refresh</button>
+    <!-- Not `data-go="home"`: that is wired to sign the reader out, and this screen is
+         reachable from the desk. `wireLeaderboard` sends it back where it came from. -->
+    <button class="btn ghost sm" id="lbback">Back</button>
+  </div>
+  <div id="lbbox"></div>
+</section>

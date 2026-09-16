@@ -1,0 +1,65 @@
+/* A table whose header stays put while the body scrolls. `position:sticky` resolves
+   against the nearest scrolling ancestor, so the header has to live *inside*
+   `.tscroll` — put it outside and it simply never sticks. The row has a min-width so a
+   narrow screen scrolls this box sideways instead of wrapping cells out of their
+   columns, which is the failure a pinned header makes obvious. */
+.tbl{background:var(--panel); border:1px solid var(--rule); border-radius:5px;
+  box-shadow:var(--shadow); overflow:hidden}
+.tscroll{max-height:min(70vh,560px); overflow:auto}
+.thead{position:sticky; top:0; z-index:var(--z-sticky); background:var(--panel-2); min-width:660px;
+  border-bottom:1px solid var(--rule-2); display:flex; gap:14px; padding:11px 24px;
+  font-family:"Tabular",monospace; font-size:11px; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--dim)}
+.trow{display:flex; gap:14px; align-items:baseline; padding:14px 24px; min-width:660px;
+  border-top:1px solid var(--rule)}
+.trow:first-child{border-top:none}
+.tc1{min-width:104px; flex:none; font-weight:500}
+.tc2{min-width:124px; flex:none}
+.tc3{flex:1 1 260px; min-width:0}
+.tc4{margin-left:auto; flex:none; min-width:158px; text-align:right}
+/* The share column (tasks/16). Its heading is deliberately empty — a column of buttons
+   labelled "Share" twice reads as a mistake — but it has to exist, or the header and
+   the rows disagree about how many columns there are. */
+.tc5{flex:none; min-width:78px; text-align:right}
+
+/* The explanation, pinned under the figures it explains — outside `.tscroll` so it
+   does not scroll away from them. */
+.tfoot{border-top:1px solid var(--rule-2); background:var(--panel-2); padding:12px 24px;
+  color:var(--dim); font-size:13px; line-height:1.6; max-width:none}
+.tfoot strong{color:var(--ink-2); font-weight:500}
+
+/* The closed-trade detail. A labelled grid rather than a paragraph: these are eight
+   figures, and a sentence makes them unscannable down a column. */
+.tdl{display:grid; grid-template-columns:auto 1fr; gap:5px 18px; margin:0;
+  font-family:"Tabular",monospace; font-size:13px}
+.tdl dt{color:var(--dim)}
+.tdl dd{margin:0; color:var(--ink-2)}
+
+/* ── The phone (tasks/26) ──────────────────────────────────────────
+   660px is `.thead`'s own floor and 20px is `.wrap`'s narrow gutter, so 720 is
+   the width below which the desktop tables cannot fit however they are asked to. */
+@media (max-width:720px){  /* A row stops being a row.
+     The old behaviour was chosen rather than missed — the comment above `.tbl` argues
+     sideways scroll over cells wrapping out of their columns, which is true about
+     those two options. This is the third: below the fold-point the columns become
+     lines and the header, having nothing left to label, goes away. At 414px the
+     desktop layout rendered a heading reading WHAT HAPPENE over values clipped to
+     `6.6`, `+15`, `mar`, `hig`, which reads as a rendering fault and not as a
+     scrollable region. */
+  .tscroll{max-height:none; overflow:visible}
+  .thead{display:none}
+  .trow{display:grid; grid-template-columns:1fr auto; gap:9px 12px; align-items:baseline;
+    min-width:0; padding:16px 18px}
+  .tc1{grid-area:1/1; min-width:0; font-size:15px}
+  .tc2{grid-area:1/2; min-width:0; justify-self:end; text-align:right}
+  /* The figure sits directly under the market, ahead of the detail. It is what the
+     row is opened for. Every one of these overrides a top-level rule in this same
+     file, which is the reason they have to live here: in desk.css, where they were
+     written, they came before it and did nothing. */
+  .tc4{grid-area:2/1/auto/-1; margin-left:0; min-width:0; text-align:left}
+  .tc3{grid-area:3/1/auto/-1; min-width:0}
+  .tc5{grid-area:4/1/auto/-1; min-width:0; text-align:left}
+  .tc5 .sharebtn{padding:10px 0; min-height:44px}
+  .tdl{grid-template-columns:auto 1fr; gap:4px 14px}
+  .tfoot{padding:12px 18px}
+}

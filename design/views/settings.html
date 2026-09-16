@@ -1,0 +1,90 @@
+<!-- ═══════════ SETTINGS ═══════════ -->
+<!-- Behind the address in the header, which is where every other product on the
+     internet puts a settings menu — the owner's "easy to find in a logical place"
+     (tasks/27 §7).
+
+     Why these blocks are here rather than in the tab row: they are settings. `Open`,
+     `History` and `Skipped` all answer *what is happening with my money*; `Your limits`
+     and `Leaving` answer *how should it be run*, and that is a question somebody asks
+     rarely and should not have to scroll past every time they check a number.
+
+     What moving them does **not** change is that a setting is frozen into each position
+     at open. `src/exec/change-queue.ts` is still the only path that alters a mandate or
+     a limit, and a change made here still applies to the next position rather than to
+     the ones already open. The card says so itself. -->
+<section id="v-settings" hidden>
+  <div class="sethead">
+    <h1>Settings</h1>
+    <span class="sp"></span>
+    <button class="tbtn" data-go="desk">Back to the desk</button>
+  </div>
+
+  <div class="card pad">
+    <div class="kicker" style="font-size:12px; margin-bottom:12px">Your limits</div>
+    <!-- The controls themselves live here, rendered by design/src/deskLimits.ts: the
+         three settings are changed in the card that states them, each with what it
+         costs in dollars beside it, and one Apply button (tasks/18 §9). What follows
+         is the demo card a signed-out visitor sees, and is replaced wholesale on the
+         first render. -->
+    <div id="dlimits">
+    <div class="kv"><span class="k">Mandate</span><span>$117.25</span></div>
+    <div class="kv"><span class="k">Leverage</span><span>10×</span></div>
+    <div class="kv"><span class="k">Stop</span><span>3% of the price</span></div>
+    <div class="kvnote">A stop-out costs $3.52 · 3% of the mandate · 30% of the position's margin.
+      About 3.3 stopped positions in one day pause the account.</div>
+    <div class="kv"><span class="k">Per position</span><span>10% · $11.72</span></div>
+    </div>
+    <div class="note bad" id="drefused" hidden style="margin-top:16px; font-size:14px"></div>
+  </div>
+
+  <!-- The quiet half of the agent story, and the reason it is a line rather than
+       silence: "we never mention agents at all" is how somebody reaches the last day
+       of one without ever having seen the word. The loud half — the note when an
+       approval is close or gone — stays on the desk, where it interrupts.
+       tasks/13. -->
+  <div class="card pad" style="margin-top:24px">
+    <div class="kicker" style="font-size:12px; margin-bottom:12px">This account</div>
+    <!-- Demo rows, replaced wholesale by `renderAccount` on the first render. Every
+         other block a signed-out visitor can reach carries them; the two that did not
+         were a heading over nothing, and tasks/26 §5 is the record of what that looked
+         like. -->
+    <div id="dacct">
+    <div class="kv"><span class="k">Address</span><span>0x4Fe5b1D9a7C3E82f4A6b5D0c1E9f8A2B3d4CC08A</span></div>
+    <div class="kv"><span class="k">Managing since</span><span>Sep 3, 2026, 09:14 AM</span></div>
+    <div class="kv"><span class="k">Approval runs to</span><span>Mar 2, 2027, 06:41 PM</span></div>
+    </div>
+    <!-- What we charge, and the one place on the site anybody is asked to pay for
+         anything. Under the account's other terms because that is what a fee is, and
+         hidden entirely while we charge nothing — which is every account today. Saying
+         "no fee" unprompted raises a subject nobody asked about and implies one is
+         coming. tasks/14 §2.4. -->
+    <div id="dfee" hidden style="margin-top:4px"></div>
+  </div>
+
+  <!-- Leaving. Last, under everything, away from the controls somebody uses routinely
+       (tasks/18 §9, ask 2). It sat beside "Change limits" in the limits card until
+       2026-09-04, when the owner — wanting the sliders on an account whose Change
+       button is hidden because a file pins it — pressed this one instead, and the
+       executor spent eleven minutes releasing and re-admitting a live account. Moving
+       the settings behind the header did not move this rule: it keeps its distance,
+       its rule above it, and its confirmation.
+       Hidden entirely for a pinned account: the limits card explains why. -->
+  <div id="dleaving">
+    <div class="setend"><h2>Leaving</h2></div>
+    <div class="card pad">
+      <button class="btn danger sm" id="dunlink">Stop managing my account</button>
+      <div class="hint" id="dunlinkerr" hidden style="margin-top:10px; color:var(--down)"></div>
+      <div class="note warn" id="dunlinkconfirm" hidden style="margin-top:14px">
+        <strong>We will stop managing this account. We will not close anything.</strong>
+        Any open position stays open on Hyperliquid with its stop still resting there, so it
+        stays protected — but <strong>nothing will close it when the outlook expires</strong>,
+        which is the job we were doing. Close it yourself, and revoke our agent on Hyperliquid
+        so we cannot place another order.
+        <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap">
+          <button class="btn danger sm" id="dunlinkyes">Yes, stop managing it</button>
+          <button class="btn ghost sm" id="dunlinkno">Keep managing it</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

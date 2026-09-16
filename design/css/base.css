@@ -1,0 +1,127 @@
+/* Atmosphere: a bloom the hero sits inside, and grain so the gradients are not plastic. */
+body::before{content:""; position:fixed; inset:-20% -10% auto -10%; height:130vh; pointer-events:none; z-index:var(--z-bloom);
+  background:
+    radial-gradient(52% 40% at 22% 8%, var(--bloom-a), transparent 68%),
+    radial-gradient(46% 36% at 88% 26%, var(--bloom-b), transparent 70%);}
+body::after{content:""; position:fixed; inset:0; pointer-events:none; z-index:var(--z-grain); opacity:var(--grain);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");}
+
+.mono,.num{font-family:"Tabular",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-variant-numeric:tabular-nums}
+.wrap{max-width:1120px; margin:0 auto; position:relative; z-index:var(--z-page);
+  padding:0 max(40px,env(safe-area-inset-right)) calc(140px + env(safe-area-inset-bottom)) max(40px,env(safe-area-inset-left))}
+
+/* ── Chrome ──────────────────────────────────────────────────────── */
+.bar{display:flex; align-items:center; gap:16px; padding:34px 0 26px; flex-wrap:wrap}
+.mark{font-weight:600; font-size:19px; letter-spacing:-.02em; display:flex; align-items:center; gap:10px}
+/* The two header marks are buttons and go home (owner, 2026-09-08). Reset to look
+   exactly like the div they replaced, so the header did not change; `min-height` is the
+   44px target, and it fits inside the bar's own padding rather than adding to it. The
+   footer's mark is still a div — a footer logo is not navigation, and the only control
+   down there is the link. */
+button.mark{background:none; border:0; padding:0; margin:0; color:inherit; font-family:inherit;
+  cursor:pointer; min-height:44px; transition:opacity .15s}
+@media (hover:hover){ button.mark:hover{opacity:.72} }
+/* The designer's mark, drawn by the <symbol> at the top of the body. Sized in `em` so
+   the one rule serves the 19px headers and the 16.5px footer, and left on `currentColor`
+   so it is the header's own ink — which is how the mark was drawn. It replaced a CSS
+   square in the accent (tasks/20 §2).
+
+   1.35em, not the lockup's own 1.05 (owner, 2026-09-16, §4.3). The designer set the mark
+   at 426 units against 400px type, and matching that ratio is not the same as matching
+   the weight: the glyph is outline-and-shear where the wordmark is solid, so at parity it
+   reads as the smaller of the two. It is sized to the wordmark's cap height plus a third
+   rather than to its em box. */
+.mark .g{height:1.35em;width:auto;flex:none}
+.bar-end{margin-left:auto; display:flex; align-items:center; gap:8px}
+
+/* ── The account menu ─────────────────────────────────────────────
+   One popup, used by both headers. It is here rather than in desk.css or home.css
+   because both chrome bars are in `mandate.html` and neither belongs to a view — and
+   because a rule that narrows a selector must not sit in a file included before the
+   one that defines it, which is what put ten dead rules in this file's own responsive
+   blocks (see below).
+
+   The trigger is the address, and it is drawn as quietly on the editorial header as it
+   is on the desk: this is navigation, not a call to action, and `Sign in` / `Get
+   access` is the only thing in either bar allowed to be loud. */
+.menu{position:relative; display:flex; align-items:center}
+/* The face comes from `.mono` on the element, not from `inherit` — the desk header sets
+   Tabular on `.tbar` and the editorial one does not, so inheriting gave the same
+   control two different typefaces on two screens. It is also not `.tbtn`: that draws a
+   bordered chip, and the address is quiet on both headers for the reason tasks/27 §7
+   gave when it was still a span. */
+.who{font-size:12px; color:var(--dim); background:none; border:0; padding:4px 2px;
+  display:inline-flex; align-items:center; gap:7px; cursor:pointer; min-height:44px}
+/* The caret is a CSS triangle, not a character: ▾ and ⌃ are in neither webfont and fall
+   back to whatever the system has, which rendered as a near-invisible dot the last time
+   one was used here. It also cannot be a child element — `paintChrome` writes the
+   address with `textContent`, which would delete one. */
+.who::after{content:""; width:0; height:0; border:3.5px solid transparent;
+  border-top-color:currentColor; margin-top:3px; transition:transform .15s}
+.who[aria-expanded="true"]::after{transform:rotate(180deg); margin-top:-3px}
+.who[aria-expanded="true"]{color:var(--ink)}
+@media (hover:hover){ .who:hover{color:var(--ink)} }
+.who:focus-visible{outline:1px solid var(--rule-2); outline-offset:3px; border-radius:3px}
+/* Above the tables' sticky headers, which is the only other thing on the page that
+   stacks — `--z-sticky` is 2 and a menu that slid under a column header would look
+   broken. Not `--z-dialog`: the wallet picker and the share sheet are modal and this
+   is not, so it must not sit at their rung. */
+.menupop{position:absolute; top:calc(100% + 6px); right:0; z-index:var(--z-sticky);
+  min-width:196px; padding:5px; display:flex; flex-direction:column;
+  background:var(--panel); border:1px solid var(--rule-2); border-radius:6px;
+  box-shadow:0 8px 24px rgba(22,20,15,.14), var(--shadow)}
+.menupop button{font:inherit; font-size:14px; text-align:left; color:var(--ink-2);
+  background:none; border:0; border-radius:4px; padding:0 12px; cursor:pointer;
+  min-height:44px; display:flex; align-items:center; transition:background-color .12s,color .12s}
+@media (hover:hover){ .menupop button:hover{background:var(--panel-2); color:var(--ink)} }
+.menupop button:focus-visible{outline:2px solid var(--accent); outline-offset:-2px}
+/* Leaving is not a routine control, and it is the last item under three that are —
+   the settings screen keeps its own rule above *Stop managing my account* for exactly
+   this reason (tasks/18 §9). */
+.menupop button[data-signout]{border-top:1px solid var(--rule); border-radius:0 0 4px 4px;
+  margin-top:5px; padding-top:5px}
+.tbtn{font:inherit; font-size:13px; color:var(--dim); background:none; border:1px solid var(--rule);
+  border-radius:5px; padding:8px 13px; cursor:pointer; transition:color .15s,border-color .15s;
+  min-height:44px; display:inline-flex; align-items:center; justify-content:center}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:3px}
+
+.btn{font:inherit; font-size:14px; font-weight:500; padding:14px 26px; border-radius:5px; cursor:pointer;
+  display:inline-flex; align-items:center; justify-content:center; text-decoration:none; min-height:44px;
+  border:1px solid transparent; color:var(--btn-ink); background:var(--btn-bg);
+  transition:opacity .15s,background-color .15s,border-color .15s,color .15s}
+.btn:active{opacity:1}
+.btn:disabled{opacity:.32; cursor:not-allowed}
+.btn.ghost{background:none; color:var(--ink); border-color:var(--rule-2)}
+.btn.danger{background:none; color:var(--down); border-color:var(--down)}
+@media (hover:hover){
+  .tbtn:hover{color:var(--ink); border-color:var(--rule-2)}
+  .btn:hover{opacity:.84}
+  .btn.ghost:hover{background:var(--panel-2); border-color:var(--ink-2); opacity:1}
+  .btn.danger:hover{background:var(--down-soft); opacity:1}
+}
+.btn.sm{font-size:13px; padding:10px 17px}   /* min-height from .btn keeps the target at 44 */
+
+/* ── Narrower than the text column wants ─────────────────────────────
+   Only `.wrap` is left here, and that is the rule: a responsive block belongs in the
+   file that defines the selector it narrows, never in an earlier one.
+
+   These two blocks used to carry the home page's and the desk's rules as well, and
+   **every one of them was dead** from 2026-09-08 until it was noticed on a phone. A
+   media query adds no specificity, so `@media (max-width:860px){.beats{...}}` here
+   loses to the plain `.beats{...}` in home.css purely because home.css is included
+   later — the three-beat block stayed a five-column grid at 390px. `.hero`, `.sec`,
+   `.claim`, `.beat`, `.conn`, `.chip`, `.plot`, `.live`, `.track` and `.tlab` went the
+   same way. `notes/2026-09-08-responsive-rules-were-dead.md` has the measurement and
+   why the split's verification pass could not see it. */
+@media (max-width:860px){  .wrap{padding-left:max(28px,env(safe-area-inset-left)); padding-right:max(28px,env(safe-area-inset-right))}
+}
+@media (max-width:560px){  .wrap{padding-left:max(20px,env(safe-area-inset-left)); padding-right:max(20px,env(safe-area-inset-right))}
+}
+
+/* Both declarations are `!important`, so this works wherever it sits; it is here
+   because `*` is a base concern and not any one view's. */
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important; transition:none !important}
+  .plot{clip-path:none !important}
+}

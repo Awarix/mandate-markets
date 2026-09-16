@@ -1,0 +1,271 @@
+/* ── Terminal (behind the login) ─────────────────────────────────── */
+body.term{background:var(--ground)}
+body.term .wrap{max-width:1180px}
+.term-only{display:none} body.term .term-only{display:block}
+body.term .edit-only{display:none}
+.tbar{display:flex; align-items:center; gap:14px; padding:22px 0 16px; border-bottom:1px solid var(--rule);
+  margin-bottom:32px; font-family:"Tabular",monospace; flex-wrap:wrap}
+/* The address is the menu trigger on both headers, so `.who` is in base.css beside the
+   popup it opens. It stays sized and coloured like the span it replaced (tasks/27 §7),
+   which is what keeps the bar from getting louder in exchange for holding more. */
+.pill{display:inline-flex; align-items:center; gap:5px; border-radius:4px; font-size:11px; font-weight:500;
+  letter-spacing:.06em; text-transform:uppercase; padding:4px 8px; border:1px solid transparent;
+  font-family:"Tabular",monospace}
+.pill.up{color:var(--up); background:var(--up-soft); border-color:var(--up)}
+.pill.down{color:var(--down); background:var(--down-soft); border-color:var(--down)}
+.pill.acc{color:var(--accent); background:var(--accent-soft); border-color:var(--accent)}
+.pill.quiet{color:var(--dim); border-color:var(--rule-2)}
+.dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex:none}
+
+/* ── The hero: two blocks (tasks/27 §1, §5) ───────────────────────
+   The 1px gap over a `--rule` ground is what draws the divider between them, and it is
+   the trick the five stat tiles this replaces used, so there is still one way a panel
+   is subdivided on this site rather than two.
+
+   Only the children paint `--panel`, which is why the column count is explicit at every
+   width rather than `auto-fit`: an empty slot shows the container through and reads as
+   a broken tile. That is not hypothetical — it is exactly what the tiles did until
+   tasks/26 §2, with five children in a three-column grid. Two children, two columns,
+   one column on a phone: no arrangement here has a hole in it. */
+.hero2{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--rule);
+  border:1px solid var(--rule); border-radius:5px; overflow:hidden; box-shadow:var(--lift),var(--shadow)}
+.h2card{background:var(--panel); padding:26px 28px 24px; display:flex; flex-direction:column}
+.h2card .lab{font-family:"Tabular",monospace; font-size:11px; letter-spacing:.17em;
+  text-transform:uppercase; color:var(--dim)}
+.h2card .v{font-family:"Tabular",monospace; font-weight:700; font-size:clamp(32px,5vw,46px);
+  letter-spacing:-.04em; line-height:1; margin-top:10px; font-variant-numeric:tabular-nums}
+.h2card .halt{font-family:"Tabular",monospace; font-size:12.5px; color:var(--dim);
+  line-height:1.5; margin-top:auto; padding-top:16px}
+/* The halt banner's own detail (tasks/30 §2): what the day looked like, worst first,
+   and the one action the owner has. Inside `.note.bad`, so the colour is already set —
+   these only give the day's list a size of its own and keep the button off the text. */
+#dhalt .haltday{font-family:"Tabular",monospace; font-size:12.5px; margin-top:10px}
+#dhalt .haltlist{font-family:"Tabular",monospace; font-size:12.5px;
+  margin:6px 0 0; padding-left:18px; line-height:1.6}
+#dhalt .haltact{margin:12px 0 0}
+/* The split under the net figure. `Positions` and `Cash` are always here; a venue row
+   joins them when that venue holds something — see the comment in views/desk.html for
+   why an absent row is the only honest treatment of a venue we have not built yet.
+
+   A hairline above it rather than a gap, because these four are a decomposition of the
+   number over them and not a second list: the rule says "this is that, broken up". */
+.venues{margin-top:16px; padding-top:13px; border-top:1px solid var(--rule);
+  font-family:"Tabular",monospace; font-size:13px; color:var(--dim)}
+.venues > div{display:flex; justify-content:space-between; gap:16px; padding:3px 0}
+.venues b{font-weight:400; color:var(--ink-2)}
+/* A venue we could hold money at and do not: a control, not a dash (tasks/27 §5). */
+.venues .vlink{font-family:inherit; font-size:11.5px; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--accent); background:none; padding:2px 8px;
+  border:1px solid var(--accent-line); border-radius:3px; cursor:pointer; min-height:0}
+.vnote{margin-top:10px; font-size:12.5px; color:var(--dim); line-height:1.45}
+
+/* ── The equity curve (tasks/29) ──────────────────────────────────
+   Hyperliquid's own `portfolio` series, drawn by design/src/chart.ts. What is plotted
+   is profit and loss and never account value: `pnlHistory` is deposit-adjusted and
+   `accountValueHistory` is not, so a chart of the latter draws money paid in as a
+   climb (`notes/2026-09-08-balance-chart-feasibility.md`).
+
+   The window row is the desk's underline tabs at a smaller size, deliberately — the
+   affordance was measured off Quotient's portfolio for the pane tabs (tasks/27 §2) and
+   a second shape meaning "press me" on the same screen would collide with the first. */
+.chead{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+.cwin{display:flex; align-items:flex-end; gap:14px; margin-left:auto}
+.cwin button{font-family:"Tabular",monospace; font-size:11.5px; letter-spacing:.08em;
+  background:none; border:0; border-bottom:1.5px solid transparent; padding:0 1px 4px;
+  color:var(--dim); cursor:pointer; line-height:1.4; transition:color .15s}
+.cwin button[aria-selected="true"]{color:var(--ink); border-bottom-color:var(--ink)}
+@media (hover:hover){ .cwin button:hover{color:var(--ink)} }
+.cwin button:focus-visible{outline:1px solid var(--rule-2); outline-offset:3px; border-radius:2px}
+/* Grows to fill the card, with a floor. `.h2card` is a flex column and the two cards
+   are the same height, so the chart takes whatever the balance beside it does not use
+   instead of leaving a band of empty under itself.
+
+   The floor is also the reserved height, so the card does not jump when the history
+   lands a second after the balance it sits under (the same argument as `.tabpane`'s
+   floor, tasks/27 §9). `min-width:0` because an SVG in a grid column otherwise refuses
+   to shrink below its intrinsic width and pushes the hero wider than the page. */
+.cplot{margin-top:16px; flex:1 1 auto; min-height:132px; min-width:0}
+.cplot svg{display:block; width:100%; height:100%; min-height:132px; overflow:visible}
+/* The draw-in, and it is a clip rather than a stroke-dash animation: the line is a
+   polyline whose length changes with the window, and `stroke-dasharray` would need
+   that length measured on every redraw. Disabled with the rest of the motion by the
+   `prefers-reduced-motion` rule in base.css, and chart.ts does not add the class at
+   all in that case, so neither half depends on the other. */
+/* The card with no line in it. Sized like the plot it replaces, so a live desk whose
+   history arrives a second late does not shift the page under the reader. */
+.cnone{margin-top:16px; flex:1 1 auto; min-height:132px; display:flex; align-items:center;
+  font-size:13.5px; color:var(--dim); line-height:1.5; max-width:34em}
+.cplot svg.cdraw{animation:cdraw .8s cubic-bezier(.4,0,.2,1)}
+@keyframes cdraw{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+
+/* Green is the money colour and the accent stays out of the money entirely (tasks/27
+   §4). These two figures are `--up` rather than a brighter green: the delta is bigger
+   here than it was in the tile it came from, which is the whole of "green gets to be
+   bigger rather than louder". No control on this screen is green — a green button
+   beside a green profit figure costs green its meaning, which is the reason it is
+   worth using.
+
+   They were the largest green on the site until 2026-09-08, when a position card's own
+   result went past them at 30px. That is not a demotion of the window's delta: the two
+   answer different questions and are never read side by side, and the card's figure is
+   the one a reader scrolls a list to compare. */
+.plrow{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-top:14px}
+.plrow:first-of-type{margin-top:12px}
+.pv{font-family:"Tabular",monospace; font-weight:700; font-size:clamp(19px,2.4vw,23px);
+  letter-spacing:-.03em; font-variant-numeric:tabular-nums}
+.pk{font-size:12.5px; color:var(--ink-2); line-height:1.35}
+.pk em{display:block; font-style:normal; font-size:11.5px; color:var(--dim)}
+#dsharewrap{margin-top:auto; padding-top:18px}
+
+.pcard{border:1px solid var(--rule); border-radius:5px; background:var(--panel); overflow:hidden;
+  box-shadow:var(--shadow)}
+.pcard + .pcard{margin-top:14px}
+.phead{display:flex; align-items:center; gap:12px; flex-wrap:wrap; padding:12px 24px 14px}
+.phead .coin{font-family:"Tabular",monospace; font-weight:700; font-size:16px}
+.phead .q{font-weight:600; font-size:15.5px; max-width:34ch; line-height:1.3; letter-spacing:-.01em}
+/* The corner: `Share` on top, the result under it, both hard against the card's right
+   edge (the owner's mockup, 2026-09-08). It replaces a row that read
+   `figure, then button` — which stopped the largest number on the card short of any
+   edge, at a distance set by how wide the word `Share` happens to be. A column pins the
+   figure to the same edge as `target` on the track below it, and gives the button the
+   corner it was already reaching for.
+
+   `margin-left:auto` rather than a `.sp` spacer, because this is now one block and not
+   two: the spacer only ever meant "everything after me goes right". */
+.pright{margin-left:auto; display:flex; flex-direction:column; align-items:flex-end; text-align:right}
+/* The button's own 8px of padding would inset its label from the figure under it, so
+   the two would not share an edge. A negative margin cancels the padding for alignment
+   while leaving the box — and so the hit area — exactly the size it was. That box is
+   28px tall, which is under the 44px the same button gets in the history table
+   (tables.css); it was 28px before it moved here too, so this is not a regression, but
+   it is the one thing on this card worth a phone in the hand. */
+.pright .sharebtn{margin:-2px -8px 2px 0}
+/* Bigger than it was (23px). The desk's order of size is now the account's balance
+   (46px), then one position's result, then the window's delta beside the chart (23px) —
+   which is the order they are asked about, and it is what leaves this figure legible
+   from a scroll down a list of cards. It comes down with the viewport because it has
+   to: nothing bounds a result in dollars any more (`LIVE_MANDATE` in
+   `src/risk/params.ts`), and −$1,234,567.89 at 30px does not fit a 320px card. Checked
+   at 320/360/390/430 — `clamp` is what `.pv` above already does for the same reason. */
+.phead .pnl{font-family:"Tabular",monospace; font-weight:700; font-size:clamp(23px,2.6vw,30px);
+  letter-spacing:-.03em; line-height:1}
+/* The percentage **under** the dollars, everywhere a result is drawn. It was inline on
+   a position card and stacked in the history, so the same figure had two shapes on one
+   screen; the share card stacks too (`src/web/cards.ts`), which makes this the third
+   place that had to agree and the tie-breaker. */
+.pnl small{display:block; margin-top:2px; font-size:12.5px; font-weight:500;
+  letter-spacing:0; opacity:.85}
+/* On the card it is set against a figure half again as large as the history's, so it
+   scales with it rather than staying at the table's 12.5px. */
+.phead .pnl small{font-size:clamp(12.5px,1.4vw,16px); line-height:1.2; margin-top:4px}
+.kvnote{font-size:13px; color:var(--dim); line-height:1.5; padding:0 0 12px; margin-top:-6px}
+.kvnote .btn{margin:2px 8px 4px 0; vertical-align:middle}
+.up{color:var(--up)} .down{color:var(--down)}
+.track{padding:0 24px 22px}
+.axis{position:relative; height:1px; background:var(--rule-2); margin-top:32px}
+.axis .band{position:absolute; top:-3.5px; height:8px; border-radius:1px; min-width:2px}
+.axis .band.up{background:var(--up)} .axis .band.down{background:var(--down)}
+.axis .tk{position:absolute; width:1px; background:var(--rule-2)}
+.axis .tk.end{top:-6.5px; height:14px}
+.axis .tk.lo{background:var(--down)} .axis .tk.hi{background:var(--up)}
+.axis .tk.entry{top:-8.5px; height:18px; background:var(--ink-2); box-shadow:0 0 0 1.5px var(--panel)}
+.axis .tk.now{top:-12.5px; height:26px; width:2px; background:var(--ink);
+  box-shadow:0 0 0 1.5px var(--panel)}
+.axis .nowlab{position:absolute; bottom:17px; transform:translateX(-50%); white-space:nowrap;
+  font-family:"Tabular",monospace; font-size:12px; font-weight:500; color:var(--ink)}
+.tlab{position:relative; height:15px; margin-top:14px; font-family:"Tabular",monospace; font-size:11.5px;
+  color:var(--ink-2)}
+.tlab > span{position:absolute; top:0; white-space:nowrap}
+.tlab .e0{left:0} .tlab .e1{right:0} .tlab .em{transform:translateX(-50%)}
+.track .lft{transform:none} .track .rgt{transform:translateX(-100%)}
+.track .w{font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); margin-right:5px}
+.tlab .e0 .w{color:var(--down)} .tlab .e1 .w{color:var(--up)}
+.why{border-top:1px solid var(--rule); background:var(--panel-2); padding:15px 24px; font-size:14px;
+  color:var(--ink-2); line-height:1.55}
+/* ── The tab row (tasks/27 §2) ────────────────────────────────────
+   Measured off Quotient's own portfolio rather than invented: the whole affordance is
+   colour plus an underline, no filled chip and no radius. Two properties are the ones
+   doing the work, and both are the reason this is not a pill:
+
+   `font-weight` is identical in both states, so selecting a tab never re-flows the row
+   under the cursor. And nothing here is `.pill` — that class already means "status
+   badge" on this site (Live, Long 10×, Next, Soon), and a second pill shape meaning
+   "press me" would collide with the first. Underline tabs also cost less CSS.
+
+   Polymarket's portfolio does the opposite and reads well on their near-black surface;
+   the reason not to copy it is ours and not aesthetic. tasks/27 §2 has the measurements
+   for both. */
+.tabrow{display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+  border-bottom:1px solid var(--rule); margin:30px 0 0}
+.tabs{display:flex; align-items:flex-end; gap:22px}
+/* `min-height` with the label pinned to the bottom, rather than the padding the
+   measurement gave: the tab has to clear 44px (tasks/26 §6.2) and growing it *upward*
+   leaves the text and the underline exactly where §2 measured them. Padding-top would
+   have moved both. */
+.tab{font-family:"General Sans",system-ui,sans-serif; font-size:14px; font-weight:500;
+  background:none; border:0; border-bottom:2px solid transparent; padding:0 2px 10px;
+  margin-bottom:-1px; color:var(--ink-2); cursor:pointer; line-height:1.4;
+  display:inline-flex; align-items:flex-end; min-height:44px; transition:color .15s}
+.tab[aria-selected="true"]{color:var(--ink); border-bottom-color:var(--ink)}
+@media (hover:hover){ .tab:hover{color:var(--ink)} }
+.tab:focus-visible{outline:1px solid var(--rule-2); outline-offset:3px; border-radius:2px}
+@media (prefers-reduced-motion: reduce){ .tab{transition:none} }
+/* The count as a dimmed suffix inside the tab, so "is there anything to look at" is
+   answered before it is pressed. */
+.tn{font-family:"Tabular",monospace; color:var(--dim); font-variant-numeric:tabular-nums;
+  margin-left:5px}
+.tabrow .pill{margin-bottom:9px}
+
+/* Reserved height, not a skeleton (tasks/27 §9). Every tab press used to shift the page
+   while `Loading…` resolved; a floor stops that for the cost of one declaration, and
+   without a second copy of every row shape to keep in step with the real one. The value
+   is a populated tab's rough height, so a full pane grows past it rather than snapping
+   to it. */
+.tabpane{min-height:420px; padding-top:22px}
+/* A pane's own controls: refresh, the window it covers, what the feed costs. */
+.paneh{display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:14px; min-height:38px}
+/* A heading per venue, then that venue's list. One venue today, which is the point —
+   Phase 5 adds a heading and a list rather than a redesign. */
+.vhead{display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin:0 0 14px}
+.vhead h2{font-size:19px; margin:0; letter-spacing:-.02em}
+.sechead{display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin:26px 0 12px}
+.sechead h2{font-size:19px; margin:0; letter-spacing:-.02em}
+.secmeta{color:var(--dim); font-size:13px; font-family:"Tabular",monospace}
+
+/* ── The phone (tasks/26) ──────────────────────────────────────────
+   660px is `.thead`'s own floor and 20px is `.wrap`'s narrow gutter, so 720 is
+   the width below which the desktop tables cannot fit however they are asked to. */
+@media (max-width:720px){  /* The trade history's own columns used to be narrowed here and were dead where they
+     stood — `.tc3`, `.tc4`, `.tc5`, `.tdl` and `.tfoot` are defined in tables.css,
+     which is included *after* this file, so its top-level `text-align:right` and
+     158px floor beat them and the Net figure right-aligned in a full-width row. They
+     are in tables.css's own phone block now, next to the rules that turn a row into a
+     grid in the first place. `notes/2026-09-08-responsive-rules-were-dead.md`.
+
+     One block over the other. The 1px gap still draws the divider, now horizontal, so
+     nothing about how the panel is subdivided changes with the axis. */
+  .hero2{grid-template-columns:1fr}
+  .h2card{padding:20px}
+  /* The share button no longer needs to sit at the bottom of a column that is now as
+     tall as its content. */
+  #dsharewrap{margin-top:0}
+  /* A floor sized for a desktop pane is a screen and a half of empty on a phone. */
+  .tabpane{min-height:300px; padding-top:18px}
+  .tabs{gap:18px}
+}
+
+/* ── Narrower still ──────────────────────────────────────────────────
+   The position card's price track, which is the one thing on the desk that cannot
+   simply wrap: `stop`, `entry` and `target` are absolutely positioned along an axis,
+   so at 390px their labels collide unless the type comes down and `entry` drops to a
+   second line.
+
+   These four rules were in base.css and were dead there for the same reason the home
+   page's were — base.css is included before this file, and a media query adds no
+   specificity, so the plain `.track` and `.tlab` rules above beat them at every width.
+   `notes/2026-09-08-responsive-rules-were-dead.md`. */
+@media (max-width:560px){
+  .track{padding-left:16px; padding-right:16px}
+  .tlab{font-size:10.5px; height:33px} .tlab .em{top:18px}
+  .track .w{font-size:9px; letter-spacing:.1em; margin-right:4px}
+}

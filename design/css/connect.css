@@ -1,0 +1,172 @@
+/* ── Connect ─────────────────────────────────────────────────────── */
+
+/* The breadcrumbs and the carousel (`tasks/38` §2).
+   ⚠ Both responsive blocks live at the BOTTOM of this file, beside the selectors they
+   narrow. A media query adds no specificity, so one written in base.css would lose to
+   these purely on include order — which is how ten of this site's responsive rules were
+   dead for a month (`notes/2026-09-08-responsive-rules-were-dead.md`). */
+.crumbs{max-width:600px; margin:0 0 20px}
+.crumbs ol{display:flex; gap:6px; list-style:none; margin:0; padding:0; flex-wrap:wrap}
+.crumbs li{flex:1 1 0; min-width:0}
+.crumbs button{width:100%; display:block; text-align:left; padding:0; background:none; border:none;
+  border-top:2px solid var(--rule-2); padding-top:8px; color:var(--dim); font-size:12.5px;
+  letter-spacing:-.005em; cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.crumbs button:disabled{cursor:default}
+.crumbs .done button{border-top-color:var(--up); color:var(--ink-2)}
+.crumbs .now button{border-top-color:var(--accent); color:var(--ink)}
+@media (hover:hover){ .crumbs button:not(:disabled):hover{color:var(--ink)} }
+
+.step{position:relative; padding:0 0 40px 44px; border-left:1px solid var(--rule); margin-left:12px}
+.step:last-child{border-left-color:transparent; padding-bottom:0}
+.step::before{content:attr(data-n); position:absolute; left:-13px; top:-2px; width:26px; height:26px;
+  border-radius:3px; background:var(--panel); border:1px solid var(--rule-2); color:var(--dim);
+  font-family:"Tabular",monospace; font-size:12px; display:grid; place-items:center}
+.step.done::before{content:"✓"; background:var(--up-soft); border-color:var(--up); color:var(--up)}
+.step.now::before{border-color:var(--accent); color:var(--accent); background:var(--accent-soft)}
+.step h3{font-size:18px; font-weight:600; margin:0 0 5px; letter-spacing:-.015em}
+.step .d{font-size:15px; color:var(--ink-2); max-width:36em}
+.step .bx{margin-top:18px}
+/* The one action. Above the steps rather than inside one of them, because which step it
+   belongs to changes four times and its position must not: somebody who has just signed
+   a wallet prompt should find the next thing where the last thing was. */
+.cact{max-width:600px; margin:0 0 44px; padding:26px 28px; border:1px solid var(--rule-2);
+  background:var(--panel); border-radius:5px; box-shadow:var(--shadow)}
+.cact .cgo{width:100%; font-size:15px; padding:16px 26px; margin-top:18px}
+/* Waiting on the desk's own loop — minting a key, or arming an account whose approval is
+   already signed. A disabled button alone reads as "you are stuck"; the sweep says the
+   waiting is ours. It rides on the button's own background so it works in both themes,
+   and `prefers-reduced-motion` kills it via the global rule in base.css. */
+.cact .cgo.working{position:relative; overflow:hidden}
+.cact .cgo.working::after{content:""; position:absolute; inset:0;
+  background:linear-gradient(90deg,transparent,rgba(127,127,127,.28),transparent);
+  transform:translateX(-100%); animation:cgosweep 1.5s ease-in-out infinite}
+@keyframes cgosweep{to{transform:translateX(100%)}}
+.cact .hint{max-width:none; margin-top:10px}
+.cact label.f{margin-bottom:8px}
+.cact input[type=text]{max-width:none; font-size:19px}
+/* The decoded destination, on screen for as long as the wallet is asking about it —
+   the same mitigation the agent approval and the fee use for signing here rather than
+   on Hyperliquid's own domain. */
+.dec{margin:14px 0 0; display:grid; grid-template-columns:auto 1fr; gap:5px 18px; font-size:13px}
+.dec dt{color:var(--dim)}
+.dec dd{margin:0; color:var(--ink-2)}
+
+/* The access queue. A panel rather than a numbered step: it is the door, and the
+   numbered steps are what is behind it. */
+.qwrap{border:1px solid var(--rule); background:var(--panel); border-radius:5px; padding:24px;
+  box-shadow:var(--shadow); max-width:640px}
+.qhead{display:flex; gap:20px; align-items:flex-start; justify-content:space-between; flex-wrap:wrap}
+.qpos{font-size:38px; line-height:1.1; letter-spacing:-.02em; margin-top:4px}
+.qrefcard{padding:18px 20px; margin-top:4px}
+.qrefcard input[type=text]{max-width:none; margin:10px 0 12px}
+.qrefrow{display:flex; gap:12px; flex-wrap:wrap; align-items:center}
+.qrefrow .hint{margin-top:0}
+.qboost{border-top:1px solid var(--rule); margin-top:22px; padding-top:18px}
+.qb-t{font-weight:500; margin-bottom:4px}
+.qb-d{color:var(--ink-2); font-size:14.5px; max-width:36em; margin-bottom:14px}
+label.f{display:block; margin-bottom:13px}
+label.f .l{display:block; font-family:"Tabular",monospace; font-size:11.5px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--dim); margin-bottom:6px}
+input[type=text]{font-family:"Tabular",monospace; font-size:16px; width:100%; max-width:460px;
+  padding:13px 14px; border-radius:4px; border:1px solid var(--rule-2); background:var(--panel); color:var(--ink)}
+input[type=text]:focus{border-color:var(--accent); outline:none; box-shadow:0 0 0 3px var(--accent-soft)}
+.hint{display:block; font-size:13.5px; color:var(--dim); margin-top:6px; max-width:36em}
+.note{border-left:3px solid var(--rule-2); padding:11px 0 11px 15px; font-size:15px; color:var(--ink-2);
+  max-width:38em; line-height:1.55}
+.note.warn{border-left-color:var(--warn)} .note.good{border-left-color:var(--up)} .note.bad{border-left-color:var(--down)}
+.note strong{color:var(--ink); font-weight:500}
+.srow{border-top:1px solid var(--rule); padding:14px 4px; display:flex; gap:14px; align-items:baseline;
+  flex-wrap:wrap}
+.srow:first-child{border-top:none}
+.srow .sc{font-weight:500; min-width:104px}
+.srow .sd{color:var(--dim); font-size:14px; flex:1 1 260px}
+.srow .sn{color:var(--dim); font-size:13px}
+
+/* ── The carousel, on a screen too narrow to read a column on ─────────
+   `tasks/38` §2, and the case it was chosen for: somebody who has just installed a
+   wallet is inside that wallet's in-app browser, where the action card and the limits
+   controls cannot share a screen at any zoom.
+
+   Above the breakpoint nothing changes — the four steps stay a column with the vertical
+   rail, which is the shape that lets a cautious person read all of it before signing
+   anything. Below it, one panel at a time, and the breadcrumbs carry the shape.
+
+   `scroll-snap` rather than a transform, so the panels are still a scrollable list: a
+   flick works, the keyboard works, and a browser that ignores every line of this shows
+   four readable panels side by side rather than a blank box. */
+@media (max-width:720px){
+  /* An app-shell, not a page: one screenful, the step's own panel scrolling inside it
+     and the action pinned where a thumb is. Asked for by the owner on 2026-09-10 —
+     *"would be awesome if on mobile height it would fit, so user dont need to scroll
+     down to see anything"* — and it is the same instinct that chose the carousel: this
+     is met inside a wallet's in-app browser, where a page you must scroll to find the
+     button is a page you lose people on.
+
+     `100dvh` and not `100vh`: on iOS Safari `vh` is the *largest* viewport, so the
+     pinned card sits behind the browser's own toolbar for the whole first scroll. */
+  /* A **height**, not a min-height. `min-height` leaves the container free to grow to
+     its content, so the track never shrinks and the pinned card is simply pushed off
+     the bottom — which is what the first version of this did.
+
+     `--shell-top` is how far down the page this section starts, measured at runtime by
+     `sizeShell()` and **not** written here as a number: it is the header plus whatever
+     padding the wrap has at this width, and a constant would be wrong the first time
+     either changes. The fallback is only for the frame before the script runs. */
+  #v-connect{display:flex; flex-direction:column; height:calc(100dvh - var(--shell-top, 104px))}
+  /* The hero, compressed hard: on a screen this size the headline is a greeting and the
+     steps are the page. `!important` because the h1 carries an inline `clamp()` from the
+     markup, and inline styles beat a stylesheet without it — the one place in this file
+     where that is true. */
+  #v-connect > div:first-child{padding:2px 0 6px}
+  #v-connect > div:first-child h1{font-size:23px !important}
+  /* The subtitle counted the steps; the bars below it show them. Two answers to one
+     question, and this is the one that costs 50px of a phone. */
+  #v-connect > div:first-child .sub{display:none}
+  .crumbs{margin-bottom:10px; order:1}
+  .crumbs button{font-size:0; padding-top:6px}   /* the bar alone; the panel says the name */
+  .ctrack{display:flex; overflow-x:auto; scroll-snap-type:x mandatory; gap:0;
+    order:2; flex:1 1 auto;
+    /* `min-height:0` is what lets a flex child actually shrink. Without it the track
+       keeps its content's full height, the section grows past the viewport, and the
+       sticky card is then lifted off its flow position and paints *over* the panel —
+       which is what the first attempt at this did, and it read as cut-off text rather
+       than as a layout bug. */
+    min-height:0;
+    /* Each panel fills the track and scrolls inside itself, so a tall step — the limits
+       form is two cards of numbers, about 1,500px on a phone — never grows the page. */
+    align-items:stretch;
+    scrollbar-width:none; -webkit-overflow-scrolling:touch}
+  .ctrack::-webkit-scrollbar{display:none}
+  .ctrack .step{flex:0 0 100%; scroll-snap-align:start; margin-left:0; padding:0 2px 14px;
+    border-left:none; overflow-y:auto; scrollbar-width:none;
+    /* Text that simply stops at the panel's edge reads as broken. Fading the last 22px
+       says "there is more here" where a scrollbar is hidden. */
+    -webkit-mask-image:linear-gradient(180deg,#000 calc(100% - 22px),transparent);
+    mask-image:linear-gradient(180deg,#000 calc(100% - 22px),transparent)}
+  .ctrack .step::-webkit-scrollbar{display:none}
+  .ctrack .step h3{font-size:17px; margin-bottom:3px}
+  .ctrack .step .d{font-size:14px; line-height:1.5}
+  /* The number moves into the flow: there is no rail to hang it off any more, and a
+     26px square floating over the heading is how it read when the border went. */
+  .ctrack .step::before{position:static; margin-bottom:8px}
+  /* The action, last in the column and stuck to the bottom of the viewport. It keeps
+     its own scroll position, so the deposit box and the referral box are reachable with
+     a thumb whatever the panel above is doing. */
+  /* Last in the column, and the column is exactly one screen — so it is at the bottom of
+     the viewport without needing to be pinned there. */
+  .cact{order:3; padding:14px 16px; margin:0; z-index:2;
+    /* The panel scrolls *under* this, so it needs its own ground and an edge. */
+    border-radius:5px 5px 0 0; box-shadow:0 -10px 24px -12px rgba(0,0,0,.6)}
+  .cact .cgo{padding:13px 22px; margin-top:12px; font-size:14.5px}
+  .cact input[type=text]{font-size:17px; padding:11px 12px}
+  .cact #cgosub{font-size:12.5px; margin-top:8px}
+  .cact label.f{margin-bottom:6px}
+  .cact .hint{margin-top:7px; font-size:13px}
+  /* Skipping stays a real control — an offer that cannot be declined is not one — but
+     it does not need a second button's worth of a phone screen beside the button it is
+     declining. */
+  #crefskip{margin-top:8px; padding:6px 0; border:none; background:none;
+    text-decoration:underline; text-underline-offset:3px}
+  /* The queue owns the whole screen when it shows, and it is not a step. */
+  #cqueue{order:2}
+}
