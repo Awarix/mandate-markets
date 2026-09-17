@@ -30,14 +30,6 @@ halt for the day after a 10% loss. The same fractions bind on $50 and on $50,000
 from the live ledger, and the sample is still too small to say. What we sell is the
 execution and the risk control.
 
-## Reading order
-
-1. `src/exec/loop.ts` — `tick()` is the whole state machine, and it is a pure function of its inputs.
-2. `src/risk/params.ts` — every number that affects money, each one carrying the argument for its value.
-3. `src/broker.ts` and `src/hl/` — the venue seam, and the Hyperliquid adapter behind it.
-4. `src/mapping/quotient.ts` — the only file that knows the forecast provider's field names.
-5. `src/store/` — the intent ledger: which signal opened which position, and what the plan was.
-
 ## Design notes worth knowing
 
 - **Two sources of truth, deliberately split.** The venue is authoritative for *facts*
@@ -74,13 +66,7 @@ Not published here:
 
 - `fixtures/` — captured Quotient and Polymarket payloads. They are another company's data
   and ours to read, not to redistribute.
-- `accounts/` — real users' wallet addresses. Every address surviving in a code comment or
-  a doc has been replaced by a valid synthetic one of the same shape, so no on-chain account
-  is identifiable from this repo.
-- `deploy/`, `.env.example` — the server configuration, the operator runbook, and the environment contract.
 - `docs/` — the product and architecture write-ups.
-- `notes/` and `tasks/` — 121 findings notes and 53 task files that are the project's
-  internal record, including live P&L.
 
 Markdown and code comments still *cite* those paths, so some references point at files you
 will not find here. Two consequences are visible when you run the suite:
