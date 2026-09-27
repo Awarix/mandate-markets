@@ -45,12 +45,26 @@ execution and the risk control.
 - **A second venue is a new stack, not a second `Broker`.** `Broker` is perp-shaped;
   Polymarket gets `src/pm/` alongside `src/hl/`.
 
+## The rulebook, on-chain
+
+The desk's rules change rarely, and each change is recorded where nobody — including us —
+can rewrite it afterwards. `MandateRulebook` on Robinhood Chain keeps a fingerprint of the
+desk's rules and the moment each set took effect, append-only:
+
+- contract `0xF53aE5DC468a57E7119e23dF25eC1b9F3De9f1B4` (chain id 4663)
+- explorer: https://robinhoodchain.blockscout.com/address/0xF53aE5DC468a57E7119e23dF25eC1b9F3De9f1B4
+- verified source: https://sourcify.dev/server/v2/contract/4663/0xF53aE5DC468a57E7119e23dF25eC1b9F3De9f1B4
+
+It holds no funds, touches no account and enforces nothing; it is the receipt. Source and
+tests are in `contracts/` (`forge test`).
+
 ## Running it
 
 ```sh
 npm install
 npm run typecheck        # clean
 npm test                 # node:test, ~2s
+(cd contracts && forge test)
 ```
 
 The executor needs an `.env` (venue network, keystore passphrase path, and the safety

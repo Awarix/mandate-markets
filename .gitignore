@@ -19,3 +19,8 @@ fixtures/
 # Internal working documents are not published.
 docs/
 .env.example
+
+# Foundry build output (contracts/)
+contracts/out/
+contracts/cache/
+contracts/broadcast/

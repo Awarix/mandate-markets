@@ -1,0 +1,18 @@
+# tasks/88 — the rulebook contract. Built and tested with Foundry (`forge test` in this directory);
+# deployed to Robinhood Chain (chain id 4663). No dependencies: the tests declare the few cheatcodes
+# they use instead of vendoring forge-std.
+[profile.default]
+src = "src"
+test = "test"
+out = "out"
+cache_path = "cache"
+libs = []
+solc_version = "0.8.28"
+# paris, not the newest: no PUSH0 or later opcodes, so the bytecode runs on any Arbitrum Orbit chain
+# whatever ArbOS version it is on.
+evm_version = "paris"
+optimizer = true
+optimizer_runs = 10000
+
+[fuzz]
+runs = 1000
